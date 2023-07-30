@@ -7,13 +7,10 @@ export function useOnWindowResize(
     const windowWidth = ref<number>(window.innerWidth);
 
     onMounted(() => {
-        console.log('зашли');
         nextTick(() => window.addEventListener("resize", onResize));
     });
 
     onUnmounted(() => {
-        console.log('вышли!');
-        
         nextTick(() => window.removeEventListener("resize", onResize));
     });
 
