@@ -1,6 +1,48 @@
+@import "./buttons";
+@import "./burger";
 * {
     color: inherit;
     margin: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+// body {
+//     font-size: $base-font-size;
+//     font-family: sans-serif;
+// }
+
+@font-face {
+    font-family: "Arizonia";
+    src: url(/assets/fonts/Arizonia-Regular.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "IBM Plex Sans";
+    src: url(/assets/fonts/IBMPlexSans-Regular.ttf);
+    font-weight: 400;
+}
+
+body {
+    font-size: $base-font-size;
+    font-family: "IBM Plex Sans";
+}
+
+button {
+    font-family : inherit;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+textarea {
+    font-size: 16px !important;
 }
 
 ul {
@@ -19,4 +61,9 @@ hr {
 
 img {
     max-width: 100%;
+    display: block;
+}
+
+.overflow-hidden {
+    overflow: hidden;
 }

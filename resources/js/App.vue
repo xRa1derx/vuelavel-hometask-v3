@@ -6,7 +6,5 @@
 <script setup lang="ts"></script>
 
 <style lang="scss">
-#app {
-    // background: $bg-dark;
-}
+
 </style>

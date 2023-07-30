@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link :to="{ name: 'admin' }">Get</router-link>
         <button @click="login()">Login</button>
     </div>
 </template>
@@ -21,9 +22,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-button {
-    background-color: $accent;
-    border-radius: math.div($base-border-radius, 1);
-}
-</style>
+<style lang="scss"></style>

@@ -1,0 +1,75 @@
+@mixin burgerStick() {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    height: 2px;
+    left: 0;
+    transition: all 0.7s ease 0s;
+}
+
+.burger {
+    display: block;
+    position: relative;
+    width: 30px;
+    height: 20px;
+    align-self: center;
+    z-index: 99;
+    & span {
+        @include burgerStick();
+        top: 9px;
+    }
+}
+.burger::before {
+    content: "";
+    @include burgerStick();
+    top: 0;
+}
+
+.burger::after {
+    content: "";
+    @include burgerStick();
+    bottom: 0;
+}
+
+@media (min-width: 601px) {
+    .burger {
+        display: none;
+    }
+}
+
+// close
+.active-burger::before {
+    top: 9px;
+    animation: 0.5s alternate spinOne;
+    transform: rotate(405deg);
+}
+
+@keyframes spinOne {
+    0% {
+        transform: rotate(45deg);
+    }
+    100% {
+        transform: rotate(405deg);
+    }
+}
+
+.active-burger {
+    & span {
+        transform: scale(0);
+    }
+}
+
+.active-burger::after {
+    bottom: 9px;
+    animation: 0.5s alternate spinTwo;
+    transform: rotate(495deg);
+}
+
+@keyframes spinTwo {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(495deg);
+    }
+}
