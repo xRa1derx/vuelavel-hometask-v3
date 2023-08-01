@@ -1,5 +1,6 @@
 @import "./buttons";
 @import "./burger";
+
 * {
     color: inherit;
     margin: 0;
@@ -28,13 +29,19 @@
     font-weight: 400;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-size: $base-font-size;
     font-family: "IBM Plex Sans";
 }
 
 button {
-    font-family : inherit;
+    font-family: inherit;
 }
 
 input[type="text"],

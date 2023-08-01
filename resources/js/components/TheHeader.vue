@@ -158,10 +158,11 @@ function menu() {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         margin: auto;
-        max-width: 1280px;
+        max-width: 1000px;
         width: 100%;
         position: relative;
         background-color: $bg-dark;
+        padding: 1rem;
         .logo {
             grid-row: 1 / 2;
             color: $accent-primary;
