@@ -7,10 +7,10 @@
         <div :class="{ overlay: isMenuOpen }" @click.self="menu()"></div>
         <div class="header__menu" :class="{ 'active-menu': isMenuOpen }">
             <nav class="header__nav">
-                <ul>
+                <!-- <ul>
                     <li><button class="btn">Блог</button></li>
                     <li><button class="btn">Материалы</button></li>
-                </ul>
+                </ul> -->
             </nav>
             <div class="header__logout">
                 <button title="logout" class="header__logout-btn btn">

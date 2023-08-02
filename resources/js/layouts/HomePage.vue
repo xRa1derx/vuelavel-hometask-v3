@@ -22,16 +22,17 @@
           я преподаю английский язык более 15-ти лет.
         </p>
         <div class="greetings-page__buttons">
-          <button class="mail-btn">
-            <img class="mail-img" src="/assets/images/mail2.svg" alt="" />
-          </button>
+          <!-- <div class="mail-link">
+            <a href="mailto:alyonaozhered@gmail.com"><img class="mail-img" src="/assets/images/mail2.svg" alt="" /></a>
+          </div> -->
           <div class="social-link">
-            <a target="_blank" href="https://vk.com/alyonamilka"><img class="vk-image" src="/assets/images/vk.png"
+            <a href="https://vk.com/alyonamilka" target="_blank"><img class="vk-image" src="/assets/images/vk.png"
                 alt="" /></a>
           </div>
-          <button class="telegram-btn">
-            <img class="telegram-img" src="/assets/images/telegram.svg" alt="" />
-          </button>
+          <div class="telegram-link">
+            <a href="https://t.me/AlyonaOzhered" target="_blank"><img class="telegram-img"
+                src="/assets/images/telegram.svg" alt="" /></a>
+          </div>
         </div>
       </section>
       <AbouteMePage />
@@ -128,13 +129,18 @@ import AbouteMePage from "../layouts/AboutMePage.vue";
         position: relative;
         display: flex;
 
-        .mail-btn {
+        div {
+          cursor: pointer;
           width: 30px;
           height: 30px;
+        }
+
+        .mail-link {
           padding: 5px;
           border-radius: 50%;
           border: none;
           margin-right: 1rem;
+          background-color: #fff;
 
           .mail-img {
             height: 100%;
@@ -142,16 +148,15 @@ import AbouteMePage from "../layouts/AboutMePage.vue";
         }
 
         .social-link {
+          margin-right: 1rem;
+
           .vk-image {
-            width: 30px;
             height: 100%;
             margin-right: 1rem;
           }
         }
 
-        .telegram-btn {
-          width: 30px;
-          height: 30px;
+        .telegram-link {
           background-color: transparent;
           padding: 0;
           border: none;
