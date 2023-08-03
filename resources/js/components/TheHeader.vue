@@ -18,39 +18,41 @@
                 </button>
             </div>
         </div>
-        <div
-            class="burger"
-            :class="{ 'active-burger': isMenuOpen }"
-            @click="menu()"
-        >
+        <div class="burger" :class="{ 'active-burger': isMenuOpen }" @click="menu()">
             <span></span>
         </div>
         <div v-if="true" class="header__login">
-            <button class="header__login-btn">
+            <button class="header__login-btn" @click="loginOpen()">
                 <img src="/assets/images/door-open.svg" alt="" />
             </button>
         </div>
         <div v-else class="header__dashboard">
-            <router-link to="/admin"
-                ><img
-                    class="header__dashboard-icon"
-                    src="/assets/images/user.svg"
-                    alt=""
-            /></router-link>
+            <router-link to="/admin"><img class="header__dashboard-icon" src="/assets/images/user.svg"
+                    alt="" /></router-link>
         </div>
+        <transition name="login">
+            <LoginComponent v-if="isLoginOpen" :isLoginOpen="isLoginOpen" @closeLogin="isLoginOpen = false" />
+        </transition>
     </header>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { useOnWindowResize } from "../composables/windowResize";
+import LoginComponent from '../components/LoginComponent.vue';
+
 const isMenuOpen = ref<boolean>(false);
+const isLoginOpen = ref<boolean>(false);
 
 useOnWindowResize(isMenuOpen, () => menu());
 
 function menu() {
     isMenuOpen.value = !isMenuOpen.value;
     document.body.classList.toggle("overflow-hidden");
+}
+
+function loginOpen() {
+    isLoginOpen.value = !isLoginOpen.value;
 }
 </script>
 
@@ -59,6 +61,7 @@ function menu() {
     display: flex;
     justify-content: space-between;
     padding: 1rem;
+
     .logo {
         line-height: 18px;
         margin: 0;
@@ -67,22 +70,13 @@ function menu() {
         font-weight: 500;
         font-family: 'Arizonia';
     }
-    .overlay {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(0, 0, 0, 0.363);
-        z-index: 1;
-    }
+
     .header__menu {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding: 4rem 0;
+
         .header__nav {
             ul {
                 li {
@@ -93,6 +87,7 @@ function menu() {
                 }
             }
         }
+
         .header__logout {
             .header__logout-btn {
                 margin-top: 1rem;
@@ -101,19 +96,23 @@ function menu() {
             }
         }
     }
+
     .header__login {
         align-self: center;
         position: absolute;
         right: 1rem;
         top: 4rem;
+
         .header__login-btn {
             width: 30px;
             height: 30px;
             padding: 0;
             border: none;
             background-color: inherit;
+            cursor: pointer;
         }
     }
+
     .header__dashboard {
         width: 30px;
         height: 30px;
@@ -122,11 +121,13 @@ function menu() {
         right: 1rem;
         top: 4rem;
     }
+
     @media (min-width: 601px) {
         .header__login {
             position: relative;
             top: 0;
         }
+
         .header__dashboard {
             position: relative;
             top: 0;
@@ -145,6 +146,7 @@ function menu() {
             transition: all 0.3s ease 0s;
             z-index: 1;
         }
+
         .active-menu {
             top: 0;
         }
@@ -163,6 +165,7 @@ function menu() {
         position: relative;
         background-color: $bg-dark;
         padding: 1rem;
+
         .logo {
             grid-row: 1 / 2;
             color: $accent-primary;
@@ -170,17 +173,21 @@ function menu() {
             margin: 0;
             align-self: center;
         }
+
         .header__menu {
             flex-direction: row;
             justify-content: center;
             grid-row: 1;
             grid-column: 2 / 3;
             padding: 0;
+
             .header__nav {
                 display: grid;
+
                 ul {
                     display: flex;
                     align-self: center;
+
                     li {
                         button {
                             font-size: 18px;
@@ -189,6 +196,7 @@ function menu() {
                 }
             }
         }
+
         .header__login {
             grid-row: 1;
             grid-column: 3 / -1;
@@ -196,9 +204,28 @@ function menu() {
             right: 0;
             justify-self: end;
         }
+
         .header__logout {
             display: none;
         }
     }
+}
+
+// animations
+.login-enter-from {
+    opacity: 0;
+}
+
+.login-enter-active {
+    transition: all 0.2s ease-in;
+    
+}
+
+.login-leave-active {
+    transition: all 0.3s ease-in-out;
+}
+
+.login-leave-to {
+    opacity: 0;
 }
 </style>
