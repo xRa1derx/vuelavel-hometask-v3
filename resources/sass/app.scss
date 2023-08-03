@@ -52,11 +52,6 @@ textarea {
     font-size: 16px !important;
 }
 
-ul {
-    padding: 0;
-    list-style-type: none;
-}
-
 a {
     text-decoration: none;
 }
@@ -85,4 +80,16 @@ img {
     right: 0;
     background-color: rgba(0, 0, 0, 0.363);
     z-index: 1;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block !important;
+}
+
+.margin0{
+    margin: 0 !important;
 }

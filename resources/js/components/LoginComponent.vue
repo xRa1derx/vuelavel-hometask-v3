@@ -87,7 +87,7 @@ defineProps<Props>();
             z-index: 1;
 
             .errors {
-                color: $error;
+                color: $attention;
                 font-size: 16px;
                 padding: 1rem 0;
 

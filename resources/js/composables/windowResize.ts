@@ -2,7 +2,7 @@ import { nextTick, onMounted, Ref, onUnmounted, ref, watch } from "vue";
 
 export function useOnWindowResize(
     isMenuOpen: Ref<boolean>,
-    closeMenu: () => void
+    callback: () => void
 ) {
     const windowWidth = ref<number>(window.innerWidth);
 
@@ -20,7 +20,7 @@ export function useOnWindowResize(
 
     watch(windowWidth, (windowWidth) => {
         if (windowWidth >= 601 && isMenuOpen.value === true) {
-            closeMenu();
+            callback();
         }
     });
 }
