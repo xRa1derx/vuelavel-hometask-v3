@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import VueGet from "./components/VueGet.vue";
-import LoginUser from "./components/LoginUser.vue";
 import HomePage from "./layouts/HomePage.vue";
 import AdminPage from "./layouts/AdminPage.vue";
 
@@ -23,11 +22,6 @@ const router = createRouter({
                     component: VueGet,
                 },
             ],
-        },
-        {
-            path: "/login",
-            component: LoginUser,
-            name: "login",
         },
     ],
 });

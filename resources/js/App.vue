@@ -1,9 +1,11 @@
 <template>
     <!-- <router-link :to="{ name: 'login' }">Login</router-link>
     <router-link :to="{ name: 'get.index' }">GET</router-link> -->
-    <transition name="route" mode="out-in">
-        <router-view></router-view>
-    </transition>
+   <router-view v-slot="slotProps">
+        <transition name="route" mode="out-in">
+            <component :is="slotProps.Component"></component>
+        </transition>
+    </router-view>
 </template>
 <script setup lang="ts"></script>
 

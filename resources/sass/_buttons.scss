@@ -1,7 +1,7 @@
 @mixin btn() {
     border-radius: 10px;
     padding: 0.1rem 1rem;
-    background-color: transparent;
+    background-color: $bg-grey;
     color: #fff;
     border: none;
     cursor: pointer;
