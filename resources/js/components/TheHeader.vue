@@ -31,7 +31,7 @@
                     alt="" /></router-link>
         </div>
         <transition name="login">
-            <LoginComponent v-if="isLoginOpen" :isLoginOpen="isLoginOpen" @closeLogin="isLoginOpen = false" />
+            <LoginComponent v-if="isLoginOpen" :isLoginOpen="isLoginOpen" @closeLogin="loginOpen()" />
         </transition>
     </header>
 </template>
@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useOnWindowResize } from "../composables/windowResize";
+import { useBodyOverflowHidden } from "../composables/bodyOverflowHidden";
 import LoginComponent from '../components/LoginComponent.vue';
 
 const isMenuOpen = ref<boolean>(false);
@@ -48,7 +49,7 @@ useOnWindowResize(isMenuOpen, () => menu());
 
 function menu() {
     isMenuOpen.value = !isMenuOpen.value;
-    document.body.classList.toggle("overflow-hidden");
+    useBodyOverflowHidden();
 }
 
 function loginOpen() {
@@ -218,7 +219,7 @@ function loginOpen() {
 
 .login-enter-active {
     transition: all 0.2s ease-in;
-    
+
 }
 
 .login-leave-active {

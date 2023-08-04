@@ -1,7 +1,23 @@
 <template>
     <div class="service">
-        <div class="service__courses" @click="test($event)">
-            <div class="service__goal service__course">
+        <div class="service__courses">
+            <div class="service__course" :class="`service__${course.class}`" v-for="(course, index) in courses" :key="index"
+                @click="showCourse()">
+                <div class="service__course-title" :class="`service__${course.class}`">
+                    <p>{{ course.title }}</p>
+                </div>
+                <div :class="`service__${course.class}-description`" class="service__course-description">
+                    <div class="service__course-description-title" :class="`service__${course.class}-description-title`">
+                        {{ course.about }}
+                    </div>
+                </div>
+                <div :class="`service__${course.class}-cost`" class='service__course-cost'>
+                    <p>от 800р</p>
+                    <p>50 мин</p>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="service__goal service__course">
                 <div class="service__goal-title service__course-title">
                     <p>The Goal</p>
                 </div>
@@ -147,14 +163,23 @@
                     <p>6500 р</p>
                     <p>5 занятий</p>
                 </div>
-            </div>
-        </div>
+            </div> -->
+            <BaseModal v-if="isCourseShowing" @closeModal="showCourse()">
+                <template #header>
+                    <div class="service__goal-title service__course-title">
+                        <p>The Goal</p>
+                    </div>
+                </template>
+                <template #body></template>
+                <template #footer></template>
+            </BaseModal>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-const courseData = ref([
+import BaseModal from '../components/BaseModal.vue';
+const courses = ref([
     {
         title: "The Goal",
         about: "Подготовка к экзаменам",
@@ -163,6 +188,7 @@ const courseData = ref([
         time: "50 мин",
         packetPrice: "3500 р",
         packetTime: "5 занятий",
+        class: 'goal'
     },
     {
         title: "Speak Up",
@@ -172,6 +198,7 @@ const courseData = ref([
         time: "50 мин",
         packetPrice: "3500 р",
         packetTime: "5 занятий",
+        class: 'speak-up'
     },
     {
         title: "Helping Hand",
@@ -181,6 +208,7 @@ const courseData = ref([
         time: "50 мин",
         packetPrice: "4000 р",
         packetTime: "5 занятий",
+        class: 'helping-hand'
     },
     {
         title: "Got It",
@@ -191,6 +219,7 @@ const courseData = ref([
         time: "50 мин",
         packetPrice: "4500 р",
         packetTime: "5 занятий",
+        class: 'got-it'
     },
     {
         title: "Business English",
@@ -200,15 +229,17 @@ const courseData = ref([
         time: "50 мин",
         packetPrice: "6500 р",
         packetTime: "5 занятий",
+        class: 'business'
     },
 ]);
 const isCourseShowing = ref(false);
-function test(event) {
-    event.target.firstElementChild.classList.toggle("hide");
-    event.target.children[1].firstChild.classList.toggle("hide");
-    event.target.children[1].lastChild.classList.toggle("show");
-    event.target.children[1].classList.toggle("margin0");
-    event.target.lastChild.classList.toggle("show");
+function showCourse() {
+    isCourseShowing.value = !isCourseShowing.value;
+    // event.target.firstElementChild.classList.toggle("hide");
+    // event.target.children[1].firstChild.classList.toggle("hide");
+    // event.target.children[1].lastChild.classList.toggle("show");
+    // event.target.children[1].classList.toggle("margin0");
+    // event.target.lastChild.classList.toggle("show");
     console.dir(event.target);
 }
 </script>
@@ -226,31 +257,11 @@ function test(event) {
         margin: 3rem auto;
         color: $muted;
         pointer-events: none;
-        .service__course {
-            .service__goal {
-                .service__goal-description {
-                    .service__goal-description-body {
-                        display: flex;
-                        justify-content: center;
-                    }
-                    & ul {
-                        text-align: left;
-                        list-style-type: disc;
-                    }
-                }
-            }
-            .service__helping-hand-description {
-                margin-bottom: auto;
-            }
-            .service__business-description {
-                margin-bottom: auto;
-            }
-        }
 
         .service__course {
             position: relative;
-            width: 168px;
-            min-height: 282px;
+            width: 140px;
+            min-height: 225px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -261,46 +272,39 @@ function test(event) {
             background-color: $bg-grey;
             pointer-events: all;
             cursor: pointer;
+
             .service__course-title {
                 color: #fff;
                 padding: 1rem;
-                font-size: 30px;
+                font-size: 24px;
             }
+
             .service__course-description-title {
                 padding: 0 1rem;
             }
+
             & div {
                 pointer-events: none;
             }
-            & div:nth-child(2) {
-                // margin-top: auto;
-                .service__course-description-body {
-                    padding: 1rem;
-                    display: none;
-                }
+
+            .service__course-description {
+                margin-top: auto;
             }
+
             .service__course-cost {
                 padding-bottom: 1rem;
             }
+
             .service__course-cost p:first-child {
-                font-size: 30px;
+                font-size: 24px;
                 color: $accent-primary;
             }
+
             .service__course-cost p:last-child {
                 color: #fff;
             }
-            .service__course-packet-cost {
-                padding-bottom: 1rem;
-                display: none;
-            }
-            .service__course-packet-cost p:first-child {
-                color: $attention;
-                font-size: 30px;
-            }
-            .service__course-packet-cost p:last-child {
-                color: #fff;
-            }
         }
+
         .service__course:hover {
             transform: scale(1.02);
         }
@@ -323,6 +327,26 @@ function test(event) {
             border-bottom-left-radius: 5px;
             opacity: 1;
             box-shadow: 0 5px 4px -4px #112429;
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .service {
+
+        .service__courses {
+
+            .service__course {
+                width: 168px;
+
+                .service__course-title {
+                    font-size: 30px;
+                }
+
+                .service__course-cost p:first-child {
+                    font-size: 30px;
+                }
+            }
         }
     }
 }
