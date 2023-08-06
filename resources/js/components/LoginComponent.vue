@@ -1,8 +1,7 @@
 <template>
-    <div class="login">
-        <div class="modal login__wrapper">
-            <div class="overlay" @click="emit('closeLogin')"></div>
-            <div class="modal__body">
+    <div class="login login__body">
+        <BaseModal @closeModal="emit('closeLogin')" :cssStyle="cssStyle">
+            <template #header>
                 <transition name="errors">
                     <div class="errors" v-if="errors.value != ''">
                         <div v-for="(error, index) in errors" :key="index">
@@ -10,6 +9,8 @@
                         </div>
                     </div>
                 </transition>
+            </template>
+            <template #body>
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" v-model="email" />
@@ -22,16 +23,15 @@
                     <button class="login-btn btn" @click="login()" v-if="isLoading === false">Login</button>
                     <div class="login-spinner" :class="{ activated: isLoading }"></div>
                 </div>
-                <!-- <router-link :to="{ name: 'admin' }">Get</router-link> -->
-
-            </div>
-        </div>
+            </template>
+        </BaseModal>
     </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
 import { ref } from "vue";
+import BaseModal from '../components/BaseModal.vue';
 
 interface Props {
     isLoginOpen: boolean,
@@ -41,6 +41,7 @@ const email = ref<string>('');
 const password = ref<string>('');
 const errors = ref<any>({ value: '' });
 const isLoading = ref<boolean>(false);
+const cssStyle = ref<object>();
 
 const login = () => {
     isLoading.value = true;
@@ -58,101 +59,80 @@ const emit = defineEmits<{
 defineProps<Props>();
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .login {
     z-index: 1;
+}
 
-    .login__wrapper {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+.login__body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.errors {
+    color: $attention;
+    font-size: 16px;
+    padding: 1rem 0;
+
+    div {
+        padding: 0.5rem 0;
     }
 
-    .modal {
+    div:nth-child(2) {
+        border-top: 1px solid $muted;
+    }
+}
+
+.form-group {
+    padding: 0.5rem 0;
+    position: relative;
+
+    label {
+        color: $muted;
+    }
+
+    input {
         width: 100%;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    }
 
-        .modal__body {
-            position: relative;
-            background-color: $bg-dark;
-            width: 300px;
-            padding: 15px 35px;
-            border-radius: 20px;
-            font-size: 18px;
-            z-index: 1;
+    .login-btn {
+        position: relative;
+        font-size: 18px;
+        float: right;
+    }
 
-            .errors {
-                color: $error;
-                font-size: 16px;
-                padding: 1rem 0;
+    .login-spinner {
+        position: absolute;
+        right: 30px;
+        top: 12px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: #fff;
+        z-index: -1;
+    }
 
-                div {
-                    padding: 0.5rem 0;
-                }
+    .activated {
+        animation: bumping 0.1s ease infinite alternate;
+    }
 
-                div:nth-child(2) {
-                    border-top: 1px solid $muted;
-                }
-            }
+    @keyframes bumping {
+        0% {
+            top: 14px;
+            width: 16px;
+            height: 14px;
+        }
 
-            .form-group {
-                padding: 0.5rem 0;
-                position: relative;
-
-                label {
-                    color: $muted;
-                }
-
-                input {
-                    width: 100%;
-                }
-
-                .login-btn {
-                    position: relative;
-                    font-size: 18px;
-                    float: right;
-                }
-
-                .login-spinner {
-                    position: absolute;
-                    right: 30px;
-                    top: 12px;
-                    width: 15px;
-                    height: 15px;
-                    border-radius: 50%;
-                    background-color: #fff;
-                    z-index: -1;
-                    // transition: all 0.1s ease-out;
-                }
-
-                .activated {
-                    animation: bumping 0.1s ease infinite alternate;
-                }
-
-                @keyframes bumping {
-                    0% {
-                        top: 14px;
-                        width: 16px;
-                        height: 14px;
-                    }
-
-                    100% {
-                        top: -8px;
-                        width: 16px;
-                        height: 14px;
-                    }
-                }
-
-            }
-
-
+        100% {
+            top: -8px;
+            width: 16px;
+            height: 14px;
         }
     }
+
 }
 
 
