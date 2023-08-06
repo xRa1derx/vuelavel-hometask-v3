@@ -1,7 +1,7 @@
 <template>
     <div class="modal">
         <div class="overlay" @click="$emit('closeModal')"></div>
-        <div class="modal__body">
+        <div class="modal__body" :style="cssStyle">
             <slot name="header"></slot>
             <slot name="body"></slot>
             <slot name="footer"></slot>
@@ -15,6 +15,12 @@ import { useBodyOverflowHidden } from "../composables/bodyOverflowHidden";
 
 onMounted(() => useBodyOverflowHidden());
 onUnmounted(() => useBodyOverflowHidden());
+
+interface Props {
+    cssStyle: any
+}
+
+const props = defineProps<Props>()
 </script>
 
 <style scoped lang="scss">
@@ -24,15 +30,21 @@ onUnmounted(() => useBodyOverflowHidden());
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
 
     .modal__body {
         position: relative;
-        background-color: $bg-dark;
+        background-color: $bg-grey;
         width: 300px;
         padding: 15px 35px;
         border-radius: 20px;
         font-size: 18px;
         z-index: 1;
+        margin: 0 1rem;
     }
 }
 </style>

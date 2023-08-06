@@ -1,6 +1,6 @@
 <template>
     <div class="login login__body">
-        <BaseModal @closeModal="emit('closeLogin')">
+        <BaseModal @closeModal="emit('closeLogin')" :cssStyle="cssStyle">
             <template #header>
                 <transition name="errors">
                     <div class="errors" v-if="errors.value != ''">
@@ -41,6 +41,7 @@ const email = ref<string>('');
 const password = ref<string>('');
 const errors = ref<any>({ value: '' });
 const isLoading = ref<boolean>(false);
+const cssStyle = ref<object>();
 
 const login = () => {
     isLoading.value = true;

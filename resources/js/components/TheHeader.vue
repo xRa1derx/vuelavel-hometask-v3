@@ -30,7 +30,7 @@
             <router-link to="/admin"><img class="header__dashboard-icon" src="/assets/images/user.svg"
                     alt="" /></router-link>
         </div>
-        <transition name="login">
+        <transition name="opacity">
             <LoginComponent v-if="isLoginOpen" :isLoginOpen="isLoginOpen" @closeLogin="loginOpen()" />
         </transition>
     </header>
@@ -210,23 +210,5 @@ function loginOpen() {
             display: none;
         }
     }
-}
-
-// animations
-.login-enter-from {
-    opacity: 0;
-}
-
-.login-enter-active {
-    transition: all 0.2s ease-in;
-
-}
-
-.login-leave-active {
-    transition: all 0.3s ease-in-out;
-}
-
-.login-leave-to {
-    opacity: 0;
 }
 </style>

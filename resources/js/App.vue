@@ -26,4 +26,23 @@
 .route-leave-to {
     opacity: 0;
     transform: translateY(30px);
-}</style>
+}
+
+
+.opacity-enter-from {
+    opacity: 0;
+}
+
+.opacity-enter-active {
+    transition: all 0.2s ease-in;
+
+}
+
+.opacity-leave-active {
+    transition: all 0.3s ease-in-out;
+}
+
+.opacity-leave-to {
+    opacity: 0;
+}
+</style>

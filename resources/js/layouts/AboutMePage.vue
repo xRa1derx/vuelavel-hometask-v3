@@ -1,9 +1,7 @@
 <template>
     <div class="about-me">
         <div class="about-me__container">
-            <div class="certificate">
-                <img src="/assets/images/certificate_01.jpg" alt="">
-            </div>
+
             <div class="first-col-skills">
                 <div class="skills__card1">
                     <p>Мои ученики сдают международные экзамены: <br>
@@ -15,10 +13,13 @@
                     </p>
                 </div>
                 <div class="skills__card3">
-                    <p>Имею опыт преподавания по УМК: <span>Millie</span>, <span>Spotlight</span>, <span>Stars</span>,
+                    <!-- <p>Имею опыт преподавания по УМК: <span>Millie</span>, <span>Spotlight</span>, <span>Stars</span>,
                         <span>Family and Friends</span>, <span>Solution</span>, <span>New English</span>
                         <span>File</span>, <span>Intelligent Business</span>, <span>Business Result</span>.
-                    </p>
+                    </p> -->
+                    <p>В обучении применяю интерактивную доску <a target="_blank"
+                            href="https://miro.com/online-whiteboard/"><span>Miro</span></a>. Для
+                        общения вне уроков, использую личный мессенджер.</p>
                 </div>
             </div>
             <div class="second-col-skills">
@@ -29,9 +30,7 @@
                     </p>
                 </div>
                 <div class="skills__card5">
-                    <p>Веду индивидуальные и групповые занятия через <br> <img class="skill-image"
-                            src="/assets/images/skype.svg" alt=""> <img class="skill-image" src="/assets/images/discord.svg"
-                            alt=""> <img class="skill-image" src="/assets/images/zoom.svg" alt=""></p>
+                    <p>Веду индивидуальные и групповые занятия через <br> <span>Skype, Discord, Zoom</span></p>
 
                 </div>
                 <div class="skills__card6">
@@ -39,6 +38,9 @@
                         <span>любому</span> ребенку.
                     </p>
                 </div>
+            </div>
+            <div class="certificate">
+                <img src="/assets/images/certificate_01.jpg" alt="">
             </div>
         </div>
     </div>
@@ -52,7 +54,6 @@
     background-color: #fff;
 
     .about-me__container {
-
         display: flex;
         align-items: center;
         margin: 0 auto;
@@ -63,9 +64,9 @@
         .certificate {
             flex: 0 0 90%;
             width: 355px;
-            box-shadow: 29px 27px 18px 0px rgba(0, 0, 0, 0.25);
+            box-shadow: -11px 20px 18px 0px rgba(0, 0, 0, 0.25);
             border-radius: 20px;
-            margin-right: 1rem;
+            margin-left: 1rem;
 
             img {
                 border-radius: 20px;
@@ -74,6 +75,7 @@
 
         .first-col-skills {
             display: flex;
+
             flex-direction: column;
             align-items: flex-end;
             margin-right: 1rem;
@@ -95,7 +97,7 @@
                 height: 144px;
             }
 
-            div {
+            &>div {
                 display: flex;
                 border-radius: 20px;
                 background-color: #242424;
@@ -129,6 +131,10 @@
                 width: 250px;
                 height: 112px;
                 margin-bottom: 20px;
+
+                span {
+                    color: #fff;
+                }
             }
 
             .skills__card6 {
@@ -136,7 +142,7 @@
                 height: 144px;
             }
 
-            div {
+            &>div {
                 display: flex;
                 border-radius: 20px;
                 background-color: #242424;
@@ -260,5 +266,5 @@
         }
     }
 }
-// 
-</style>
+
+// </style>
