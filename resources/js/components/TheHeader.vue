@@ -4,6 +4,7 @@
             My <br />
             Hometask
         </h2>
+        <!-- <div style="color: white">{{ authStore.user }}</div> -->
         <div :class="{ overlay: isMenuOpen }" @click.self="menu()"></div>
         <div class="header__menu" :class="{ 'active-menu': isMenuOpen }">
             <nav class="header__nav">
@@ -12,8 +13,8 @@
                     <li><button class="btn">Материалы</button></li>
                 </ul> -->
             </nav>
-            <div class="header__logout">
-                <button title="logout" class="header__logout-btn btn">
+            <div v-if="authStore.user.isAuth" class="header__logout">
+                <button class="header__logout-btn btn" @click="logout()">
                     Выйти
                 </button>
             </div>
@@ -21,15 +22,17 @@
         <div class="burger" :class="{ 'active-burger': isMenuOpen }" @click="menu()">
             <span></span>
         </div>
-        <div v-if="true" class="header__login">
-            <button class="header__login-btn" @click="loginOpen()">
-                <img src="/assets/images/door-open.svg" alt="" />
-            </button>
-        </div>
-        <div v-else class="header__dashboard">
-            <router-link to="/admin"><img class="header__dashboard-icon" src="/assets/images/user.svg"
-                    alt="" /></router-link>
-        </div>
+        <transition name="opacity">
+            <div v-if="authStore.user.isAuth" class="header__dashboard">
+                <router-link :to="{ name: 'dashboard' }" class="header__dashboard-btn"><img class="header__dashboard-img"
+                        src="/assets/images/user.svg" alt="" /></router-link>
+            </div>
+            <div v-else class="header__login">
+                <button class="header__login-btn" @click="loginOpen()">
+                    <img class="header__login-img" src="/assets/images/door-open.svg" alt="" />
+                </button>
+            </div>
+        </transition>
         <transition name="opacity">
             <LoginComponent v-if="isLoginOpen" :isLoginOpen="isLoginOpen" @closeLogin="loginOpen()" />
         </transition>
@@ -40,10 +43,15 @@
 import { ref } from "vue";
 import { useOnWindowResize } from "../composables/windowResize";
 import { useBodyOverflowHidden } from "../composables/bodyOverflowHidden";
+import { useAuthStore } from '../stores/authStore';
+import { useRouter } from "vue-router";
 import LoginComponent from '../components/LoginComponent.vue';
+import axios from "axios";
 
 const isMenuOpen = ref<boolean>(false);
 const isLoginOpen = ref<boolean>(false);
+const authStore = useAuthStore();
+const router = useRouter();
 
 useOnWindowResize(isMenuOpen, () => menu());
 
@@ -54,6 +62,23 @@ function menu() {
 
 function loginOpen() {
     isLoginOpen.value = !isLoginOpen.value;
+}
+
+function logout() {
+    axios.post('/logout').then(() => {
+        const userLocalStorage = localStorage.getItem('user');
+        const authStore = useAuthStore();
+        if (userLocalStorage) {
+            localStorage.removeItem('user');
+        }
+        authStore.user = {
+            id: null,
+            username: '',
+            isAuth: false,
+            isAdmin: false
+        };
+        router.push('/');
+    });
 }
 </script>
 
@@ -111,16 +136,35 @@ function loginOpen() {
             border: none;
             background-color: inherit;
             cursor: pointer;
+            transition: opacity 0.3s ease;
+
+            .header__login-img {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 
     .header__dashboard {
-        width: 30px;
-        height: 30px;
         align-self: center;
         position: absolute;
         right: 1rem;
         top: 4rem;
+        width: 30px;
+        height: 30px;
+
+        .header__dashboard-btn {
+            padding: 0;
+            border: none;
+            background-color: inherit;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+
+            .header__dashboard-img {
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
 
     @media (min-width: 601px) {
@@ -196,18 +240,32 @@ function loginOpen() {
                     }
                 }
             }
+
+            .header__logout {
+                position: absolute;
+                right: 0;
+                top: 4rem;
+                margin-right: 0.5rem;
+
+                .header__logout-btn {
+                    padding: 0 5px;
+                    font-size: 13px;
+                    margin-top: 0;
+                    margin-left: 0;
+                }
+            }
         }
 
-        .header__login {
+        .header__login,
+        .header__dashboard {
             grid-row: 1;
             grid-column: 3 / -1;
             position: relative;
             right: 0;
             justify-self: end;
-        }
-
-        .header__logout {
-            display: none;
+            button:hover, a:hover{
+                opacity: 0.5;
+            }
         }
     }
 }

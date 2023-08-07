@@ -1,13 +1,44 @@
 <template>
     <!-- <router-link :to="{ name: 'login' }">Login</router-link>
     <router-link :to="{ name: 'get.index' }">GET</router-link> -->
-   <router-view v-slot="slotProps">
+    <router-view v-slot="slotProps">
         <transition name="route" mode="out-in">
             <component :is="slotProps.Component"></component>
         </transition>
     </router-view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import axios from 'axios';
+import { useAuthStore } from './stores/authStore';
+import { onMounted } from 'vue';
+
+const authStore = useAuthStore();
+
+onMounted(async () => {
+    await axios.get('api').then(res => {
+        // не авторизован, но с localStorage
+        if (localStorage.getItem('user') && res.data == false) {
+            authStore.user = {
+                id: null,
+                username: '',
+                isAuth: false,
+                isAdmin: false
+            };
+            localStorage.removeItem('user');
+        }
+        // авторизован, но без localStorage
+        if (!localStorage.getItem('user') && res.data !== false) {
+            localStorage.setItem('user', JSON.stringify(authStore.user = {
+                id: res.data.id,
+                username: res.data.name,
+                isAuth: true,
+                isAdmin: false
+            }));
+        }
+    })
+
+});
+</script>
 
 <style lang="scss">
 .route-enter-from {

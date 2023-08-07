@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GetController extends Controller
 {
     public function get(){
-        return '1111';
+        return Auth::user()->id;
     }
 }

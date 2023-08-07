@@ -1,5 +1,4 @@
 <template>
-    <TheHeader />
     <div>{{ data }}</div>
 </template>
 
@@ -18,7 +17,7 @@ export default {
     },
     methods: {
         getData() {
-            axios.get("/api/get").then((res) => (this.data = res.data));
+            axios.get("/api/dashboard").then((res) => (this.data = res.data));
         },
     },
 };

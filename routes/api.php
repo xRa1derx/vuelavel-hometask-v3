@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('/', [HomeController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
-    Route::get('get', [GetController::class, 'get']);
+    Route::get('dashboard', [GetController::class, 'get']);
 });

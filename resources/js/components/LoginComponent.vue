@@ -29,9 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import axios from "axios";
-import { ref } from "vue";
 import BaseModal from '../components/BaseModal.vue';
+import { ref } from "vue";
+import { useAuthStore } from "../stores/authStore";
+import { useRouter } from 'vue-router';
 
 interface Props {
     isLoginOpen: boolean,
@@ -41,17 +42,21 @@ const email = ref<string>('');
 const password = ref<string>('');
 const errors = ref<any>({ value: '' });
 const isLoading = ref<boolean>(false);
+const authStore = useAuthStore();
+const router = useRouter();
 const cssStyle = ref<object>();
 
 const login = () => {
     isLoading.value = true;
-    axios.get("/sanctum/csrf-cookie").then(() => {
-        axios
-            .post("/login", { email: email.value, password: password.value })
-            .then(() => { isLoading.value = false; emit('closeLogin') })
-            .catch((err) => errors.value = err.response.data.errors
-            ).finally(() => isLoading.value = false);
-    });
+    authStore.login(email.value, password.value)
+        .then(() => {
+            isLoading.value = false;
+            router.push({ name: 'dashboard' });
+        })
+        .catch((err) =>
+            errors.value = err.response.data.errors
+        )
+        .finally(() => isLoading.value = false);
 };
 const emit = defineEmits<{
     (e: 'closeLogin'): void;
