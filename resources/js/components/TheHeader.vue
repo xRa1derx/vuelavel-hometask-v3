@@ -4,14 +4,17 @@
             My <br />
             Hometask
         </h2>
-        <!-- <div style="color: white">{{ authStore.user }}</div> -->
+        <!-- <div style="color: white; position: absolute; left: 0; top: 5rem; width: 50%;">{{ authStore.user }}</div> -->
         <div :class="{ overlay: isMenuOpen }" @click.self="menu()"></div>
         <div class="header__menu" :class="{ 'active-menu': isMenuOpen }">
             <nav class="header__nav">
-                <!-- <ul>
-                    <li><button class="btn">Блог</button></li>
+                <ul class="header__list">
+                    <li><button class="btn" v-if="$route.name !== 'home'"
+                            @click="$router.push({ name: 'home' })">Главная</button></li>
+                    <li><button class="btn" v-if="$route.name !== 'blog'"
+                            @click="$router.push({ name: 'blog' })">Блог</button></li>
                     <li><button class="btn">Материалы</button></li>
-                </ul> -->
+                </ul>
             </nav>
             <div v-if="authStore.user.isAuth" class="header__logout">
                 <button class="header__logout-btn btn" @click="logout()">
@@ -24,8 +27,9 @@
         </div>
         <transition name="opacity">
             <div v-if="authStore.user.isAuth" class="header__dashboard">
-                <router-link :to="{ name: 'dashboard' }" class="header__dashboard-btn"><img class="header__dashboard-img"
-                        src="/assets/images/user.svg" alt="" /></router-link>
+                <router-link :to="{ name: authStore.user.isAdmin ? 'admin' : 'dashboard' }"
+                    class="header__dashboard-btn"><img class="header__dashboard-img" src="/assets/images/user.svg"
+                        alt="" /></router-link>
             </div>
             <div v-else class="header__login">
                 <button class="header__login-btn" @click="loginOpen()">
@@ -229,7 +233,7 @@ function logout() {
             .header__nav {
                 display: grid;
 
-                ul {
+                .header__list {
                     display: flex;
                     align-self: center;
 
@@ -263,7 +267,9 @@ function logout() {
             position: relative;
             right: 0;
             justify-self: end;
-            button:hover, a:hover{
+
+            button:hover,
+            a:hover {
                 opacity: 0.5;
             }
         }

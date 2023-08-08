@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import { useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
+import axios from 'axios';
 
 export type AuthState = {
     id: number,
@@ -11,6 +12,8 @@ export type AuthState = {
 
 export const useAuthStore = defineStore('authStore', () => {
 
+
+    const router = useRouter();
     const user = ref<AuthState>({
         id: null,
         username: '',
@@ -29,13 +32,16 @@ export const useAuthStore = defineStore('authStore', () => {
                 user.value.id = data.id;
                 user.value.username = data.name;
                 user.value.isAuth = true;
+                data.is_admin ? user.value.isAdmin = true : user.value.isAdmin = false;
+
+                router.push({ name: data.is_admin ? 'admin' : 'dashboard' });
             });
             return result;
         });
     };
 
     watch(() => user, (state) => {
-        if (state.value.isAuth === true){
+        if (state.value.isAuth === true) {
             localStorage.setItem('user', JSON.stringify(state));
         }
     }, { deep: true });

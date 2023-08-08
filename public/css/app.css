@@ -1,7 +1,7 @@
 .btn {
   border-radius: 10px;
   padding: 0.1rem 1rem;
-  background-color: #3b3b3b;
+  background-color: transparent;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -15,7 +15,7 @@
 .btn--active {
   border-radius: 10px;
   padding: 0.1rem 1rem;
-  background-color: #3b3b3b;
+  background-color: transparent;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -185,6 +185,11 @@ textarea {
 
 a {
   text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
 hr {

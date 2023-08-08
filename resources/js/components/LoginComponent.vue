@@ -32,7 +32,6 @@
 import BaseModal from '../components/BaseModal.vue';
 import { ref } from "vue";
 import { useAuthStore } from "../stores/authStore";
-import { useRouter } from 'vue-router';
 
 interface Props {
     isLoginOpen: boolean,
@@ -43,7 +42,7 @@ const password = ref<string>('');
 const errors = ref<any>({ value: '' });
 const isLoading = ref<boolean>(false);
 const authStore = useAuthStore();
-const router = useRouter();
+
 const cssStyle = ref<object>();
 
 const login = () => {
@@ -51,7 +50,7 @@ const login = () => {
     authStore.login(email.value, password.value)
         .then(() => {
             isLoading.value = false;
-            router.push({ name: 'dashboard' });
+            emit('closeLogin');
         })
         .catch((err) =>
             errors.value = err.response.data.errors
@@ -111,10 +110,10 @@ defineProps<Props>();
 
     .login-spinner {
         position: absolute;
-        right: 30px;
-        top: 12px;
-        width: 15px;
-        height: 15px;
+        right: 42px;
+        top: 19px;
+        width: 6px;
+        height: 9px;
         border-radius: 50%;
         background-color: #fff;
         z-index: -1;
@@ -126,15 +125,15 @@ defineProps<Props>();
 
     @keyframes bumping {
         0% {
-            top: 14px;
-            width: 16px;
-            height: 14px;
+            top: 24px;
+            width: 9px;
+            height: 6px;
         }
 
         100% {
-            top: -8px;
-            width: 16px;
-            height: 14px;
+            top: -9px;
+            width: 9px;
+            height: 6px;
         }
     }
 

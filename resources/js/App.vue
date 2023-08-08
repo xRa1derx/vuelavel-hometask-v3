@@ -1,7 +1,6 @@
 <template>
-    <!-- <router-link :to="{ name: 'login' }">Login</router-link>
-    <router-link :to="{ name: 'get.index' }">GET</router-link> -->
     <router-view v-slot="slotProps">
+        <TheHeader />
         <transition name="route" mode="out-in">
             <component :is="slotProps.Component"></component>
         </transition>
@@ -11,6 +10,7 @@
 import axios from 'axios';
 import { useAuthStore } from './stores/authStore';
 import { onMounted } from 'vue';
+import TheHeader from './components/TheHeader.vue';
 
 const authStore = useAuthStore();
 
@@ -28,11 +28,13 @@ onMounted(async () => {
         }
         // авторизован, но без localStorage
         if (!localStorage.getItem('user') && res.data !== false) {
+            console.log(res.data);
+
             localStorage.setItem('user', JSON.stringify(authStore.user = {
                 id: res.data.id,
                 username: res.data.name,
                 isAuth: true,
-                isAdmin: false
+                isAdmin: res.data.is_admin ? true : false // поправить!!!
             }));
         }
     })
@@ -41,6 +43,10 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
+#app {
+    background-color: $bg-dark;
+}
+
 .route-enter-from {
     opacity: 0.1;
     transform: translateY(-30px);

@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <TheHeader />
+        <!-- <TheHeader /> -->
         <main>
             <section class="greetings-page">
                 <div class="greetings-page__about">
@@ -63,8 +63,6 @@ import ServicePage from "../layouts/ServicePage.vue";
 
 <style scoped lang="scss">
 .wrapper {
-    background-color: $bg-dark;
-
     main {
         .greetings-page {
             padding: 1rem;
