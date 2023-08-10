@@ -47,6 +47,9 @@ onMounted(async () => {
     background-color: $bg-dark;
 }
 
+
+//route animations
+
 .route-enter-from {
     opacity: 0.1;
     transform: translateY(-30px);
@@ -66,6 +69,8 @@ onMounted(async () => {
 }
 
 
+//opacity
+
 .opacity-enter-from {
     opacity: 0;
 }
@@ -81,5 +86,25 @@ onMounted(async () => {
 
 .opacity-leave-to {
     opacity: 0;
+}
+
+// errors
+
+.errors-enter-from {
+    opacity: 0;
+    transform: scale(1.5);
+}
+
+.errors-enter-active {
+    transition: all 0.2s ease-in;
+}
+
+.errors-leave-active {
+    transition: all 0.3s ease-in-out;
+}
+
+.errors-leave-to {
+    opacity: 0;
+    transform: scale(0);
 }
 </style>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\IndexController;
 use App\Http\Controllers\GetController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailSenderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [HomeController::class, 'index']);
+Route::post('/sendMail', [MailSenderController::class, 'sendMail']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('admin', [IndexController::class, 'index']);

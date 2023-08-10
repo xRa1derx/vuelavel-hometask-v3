@@ -289,7 +289,7 @@ import TexareaCommentComponent from '../components/Blog/TextareaCommentComponent
 // import axios from "axios";
 const sidebar = ref<HTMLInputElement | null>(null);
 function openSidebar() {
-    sidebar.value.classList.toggle('blog__sidebar-container--open');
+    sidebar.value.classList.toggle('sidebar--open');
 }
 // import BaseLightbox from "../UI/BaseLightBox.vue";
 // import CommentTextarea from "../Comments/CommentTextarea.vue";
@@ -633,10 +633,9 @@ function openSidebar() {
         background-color: $bg-grey;
         margin-left: 0;
         transition: all 0.5s ease;
-        // display: none;
     }
 
-    .blog__sidebar-container--open {
+    .sidebar--open {
         flex: 0 0 25%;
         margin-left: 1rem;
     }
@@ -646,6 +645,8 @@ function openSidebar() {
     .blog {
         .blog__sidebar-container {
             display: flex;
+            flex: 0 0 25%;
+            margin-left: 1rem;
         }
 
         .blog-post {

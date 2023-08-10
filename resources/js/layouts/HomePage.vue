@@ -1,6 +1,5 @@
 <template>
     <div class="wrapper">
-        <!-- <TheHeader /> -->
         <main>
             <section class="greetings-page">
                 <div class="greetings-page__about">
@@ -15,11 +14,7 @@
                 <div class="greetings-page__primary-image">
                     <div class="teacher">
                         <div class="teacher__container">
-                            <img
-                                class="teacher__img"
-                                src="/assets/images/teacher.png"
-                                alt=""
-                            />
+                            <img class="teacher__img" src="/assets/images/teacher.png" alt="" />
                         </div>
                     </div>
                 </div>
@@ -28,39 +23,36 @@
                     я преподаю английский язык более 15-ти лет.
                 </p>
                 <div class="greetings-page__buttons">
-                    <!-- <div class="mail-link">
-            <a href="mailto:alyonaozhered@gmail.com"><img class="mail-img" src="/assets/images/mail2.svg" alt="" /></a>
-          </div> -->
-                    <div class="social-link">
-                        <a href="https://vk.com/alyonamilka" target="_blank"
-                            ><img
-                                class="vk-image"
-                                src="/assets/images/vk.png"
-                                alt=""
-                        /></a>
+                    <div class="phone-link" @click="sendEmailOpen()">
+                        <button class="phone-link__button"><img class="phone-img" src="/assets/images/phone.svg"
+                                alt="" /></button>
                     </div>
                     <div class="telegram-link">
-                        <a href="https://t.me/AlyonaOzhered" target="_blank"
-                            ><img
-                                class="telegram-img"
-                                src="/assets/images/telegram.svg"
-                                alt=""
-                        /></a>
+                        <a href="https://t.me/AlyonaOzhered" target="_blank"><img class="telegram-img"
+                                src="/assets/images/telegram.svg" alt="" /></a>
                     </div>
                 </div>
             </section>
             <AbouteMePage />
             <ServicePage />
         </main>
+        <transition name="opacity">
+            <SendMailComponent v-if="isEmailOpen" @closeModal="sendEmailOpen()" />
+        </transition>
     </div>
 </template>
 
 <script setup lang="ts">
-import TheHeader from "../components/TheHeader.vue";
+import { ref } from "vue";
 import AbouteMePage from "../layouts/AboutMePage.vue";
 import ServicePage from "../layouts/ServicePage.vue";
-</script>
+import SendMailComponent from "../components/SendMailComponent.vue";
 
+const isEmailOpen = ref<boolean>(false);
+function sendEmailOpen() {
+    isEmailOpen.value = !isEmailOpen.value;
+}
+</script>
 <style scoped lang="scss">
 .wrapper {
     main {
@@ -149,24 +141,24 @@ import ServicePage from "../layouts/ServicePage.vue";
                     height: 30px;
                 }
 
-                .mail-link {
-                    padding: 5px;
+                .phone-link {
                     border-radius: 50%;
-                    border: none;
                     margin-right: 1rem;
-                    background-color: #fff;
 
-                    .mail-img {
+                    .phone-link__button {
+                        cursor: pointer;
+                        border: none;
+                        width: 100%;
                         height: 100%;
+                        border-radius: 50%;
                     }
-                }
 
-                .social-link {
-                    margin-right: 1rem;
+                    .phone-link__button:hover{
+                        background-color: $muted;
+                    }
 
-                    .vk-image {
+                    .phone-img {
                         height: 100%;
-                        margin-right: 1rem;
                     }
                 }
 
@@ -174,10 +166,14 @@ import ServicePage from "../layouts/ServicePage.vue";
                     background-color: transparent;
                     padding: 0;
                     border: none;
+                    border-radius: 50%;
 
                     .telegram-img {
                         height: 100%;
                     }
+                }
+                .telegram-link:hover{
+                    background-color: #3390ec;
                 }
             }
         }
@@ -236,11 +232,9 @@ import ServicePage from "../layouts/ServicePage.vue";
                         width: 300px;
                         height: 1px;
                         background: rgb(255, 255, 255);
-                        background: linear-gradient(
-                            90deg,
-                            rgba(255, 255, 255, 1) 0%,
-                            rgba(255, 118, 0, 1) 65%
-                        );
+                        background: linear-gradient(90deg,
+                                rgba(255, 255, 255, 1) 0%,
+                                rgba(255, 118, 0, 1) 65%);
                         bottom: -0.5rem;
                         left: 0;
                     }

@@ -16,11 +16,11 @@ import { useBodyOverflowHidden } from "../composables/bodyOverflowHidden";
 onMounted(() => useBodyOverflowHidden());
 onUnmounted(() => useBodyOverflowHidden());
 
-interface Props {
-    cssStyle: any
+export interface Props {
+    cssStyle?: any
 }
 
-const props = defineProps<Props>()
+defineProps<Props>();
 </script>
 
 <style scoped lang="scss">
