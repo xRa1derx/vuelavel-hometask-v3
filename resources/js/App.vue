@@ -7,38 +7,42 @@
     </router-view>
 </template>
 <script setup lang="ts">
-import axios from 'axios';
-import { useAuthStore } from './stores/authStore';
-import { onMounted } from 'vue';
-import TheHeader from './components/TheHeader.vue';
+import axios from "axios";
+import { useAuthStore } from "./stores/authStore";
+import { onMounted } from "vue";
+import TheHeader from "./components/TheHeader.vue";
 
 const authStore = useAuthStore();
 
 onMounted(async () => {
-    await axios.get('api').then(res => {
+    await axios.get("api").then((res) => {
         // не авторизован, но с localStorage
-        if (localStorage.getItem('user') && res.data == false) {
+        if (localStorage.getItem("user") && res.data == false) {
             authStore.user = {
                 id: null,
-                username: '',
+                username: "",
                 isAuth: false,
-                isAdmin: false
+                isAdmin: false,
             };
-            localStorage.removeItem('user');
+            localStorage.removeItem("user");
         }
         // авторизован, но без localStorage
-        if (!localStorage.getItem('user') && res.data !== false) {
+        if (!localStorage.getItem("user") && res.data !== false) {
             console.log(res.data);
 
-            localStorage.setItem('user', JSON.stringify(authStore.user = {
-                id: res.data.id,
-                username: res.data.name,
-                isAuth: true,
-                isAdmin: res.data.is_admin ? true : false // поправить!!!
-            }));
+            localStorage.setItem(
+                "user",
+                JSON.stringify(
+                    (authStore.user = {
+                        id: res.data.id,
+                        username: res.data.name,
+                        isAuth: true,
+                        isAdmin: res.data.is_admin ? true : false, // поправить!!!
+                    })
+                )
+            );
         }
-    })
-
+    });
 });
 </script>
 
@@ -46,7 +50,6 @@ onMounted(async () => {
 #app {
     background-color: $bg-dark;
 }
-
 
 //route animations
 
@@ -68,7 +71,6 @@ onMounted(async () => {
     transform: translateY(30px);
 }
 
-
 //opacity
 
 .opacity-enter-from {
@@ -77,7 +79,6 @@ onMounted(async () => {
 
 .opacity-enter-active {
     transition: all 0.2s ease-in;
-
 }
 
 .opacity-leave-active {
@@ -106,5 +107,18 @@ onMounted(async () => {
 .errors-leave-to {
     opacity: 0;
     transform: scale(0);
+}
+
+.--fade {
+    animation: fade 0.5s linear alternate infinite;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 </style>

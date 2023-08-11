@@ -14,8 +14,13 @@
                 <div class="greetings-page__primary-image">
                     <div class="teacher">
                         <div class="teacher__container">
-                            <img v-lazyload data-src="/assets/images/teacher.png" data-class="--fade" src="/assets/images/teacher_backplate.svg"
-                                class="teacher__img --fade" alt="" />
+                            <img
+                                v-lazyload
+                                data-src="/assets/images/teacher.png"
+                                src="/assets/images/teacher_backplate.svg"
+                                class="teacher__img --fade"
+                                alt=""
+                            />
                         </div>
                     </div>
                 </div>
@@ -25,12 +30,21 @@
                 </p>
                 <div class="greetings-page__buttons">
                     <div class="phone-link" @click="sendEmailOpen()">
-                        <button class="phone-link__button"><img class="phone-img" src="/assets/images/phone.svg"
-                                alt="" /></button>
+                        <button class="phone-link__button">
+                            <img
+                                class="phone-img"
+                                src="/assets/images/phone.svg"
+                                alt=""
+                            />
+                        </button>
                     </div>
                     <div class="telegram-link">
-                        <a href="https://t.me/AlyonaOzhered" target="_blank"><img class="telegram-img"
-                                src="/assets/images/telegram.svg" alt="" /></a>
+                        <a href="https://t.me/AlyonaOzhered" target="_blank"
+                            ><img
+                                class="telegram-img"
+                                src="/assets/images/telegram.svg"
+                                alt=""
+                        /></a>
                     </div>
                 </div>
             </section>
@@ -38,7 +52,10 @@
             <ServicePage />
         </main>
         <transition name="opacity">
-            <SendMailComponent v-if="isEmailOpen" @closeModal="sendEmailOpen()" />
+            <SendMailComponent
+                v-if="isEmailOpen"
+                @closeModal="sendEmailOpen()"
+            />
         </transition>
     </div>
 </template>
@@ -48,14 +65,12 @@ import { ref } from "vue";
 import AbouteMePage from "../layouts/AboutMePage.vue";
 import ServicePage from "../layouts/ServicePage.vue";
 import SendMailComponent from "../components/SendMailComponent.vue";
-import { vLazyload } from '../directives/lazyload';
+import { vLazyload } from "../directives/lazyload";
 
 const isEmailOpen = ref<boolean>(false);
 function sendEmailOpen() {
     isEmailOpen.value = !isEmailOpen.value;
 }
-
-
 </script>
 <style scoped lang="scss">
 .wrapper {
@@ -112,23 +127,6 @@ function sendEmailOpen() {
                     position: relative;
                     width: 60%;
                     margin: auto;
-
-                    .teacher__container {
-                        .--fade {
-                            animation: fade 0.3s linear infinite alternate;
-                        }
-
-                        @keyframes fade {
-                            0% {
-                                opacity: 0;
-                            }
-
-                            100% {
-                                opacity: 1;
-                            }
-                        }
-                    }
-
                     .teacher__container::before {
                         content: "";
                         position: absolute;
@@ -253,9 +251,11 @@ function sendEmailOpen() {
                         width: 300px;
                         height: 1px;
                         background: rgb(255, 255, 255);
-                        background: linear-gradient(90deg,
-                                rgba(255, 255, 255, 1) 0%,
-                                rgba(255, 118, 0, 1) 65%);
+                        background: linear-gradient(
+                            90deg,
+                            rgba(255, 255, 255, 1) 0%,
+                            rgba(255, 118, 0, 1) 65%
+                        );
                         bottom: -0.5rem;
                         left: 0;
                     }

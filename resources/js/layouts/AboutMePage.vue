@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="certificate">
-                <img v-lazyload data-src="/assets/images/certificate_01.jpg"
+                <img v-lazyload data-src="/assets/images/certificate_01.jpg" class="certificate__img --fade"
                     src="/assets/images/certificate_01_backplate.svg" alt="">
             </div>
         </div>
@@ -67,7 +67,8 @@ import { vLazyload } from '../directives/lazyload';
             border-radius: 20px;
             margin-left: 1rem;
 
-            img {
+            .certificate__img {
+                height: 100%;
                 border-radius: 20px;
             }
         }
