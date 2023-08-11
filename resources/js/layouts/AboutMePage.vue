@@ -13,10 +13,6 @@
                     </p>
                 </div>
                 <div class="skills__card3">
-                    <!-- <p>Имею опыт преподавания по УМК: <span>Millie</span>, <span>Spotlight</span>, <span>Stars</span>,
-                        <span>Family and Friends</span>, <span>Solution</span>, <span>New English</span>
-                        <span>File</span>, <span>Intelligent Business</span>, <span>Business Result</span>.
-                    </p> -->
                     <p>В обучении применяю интерактивную доску <a target="_blank"
                             href="https://miro.com/online-whiteboard/"><span>Miro</span></a>. Для
                         общения вне уроков, использую личный мессенджер.</p>
@@ -40,13 +36,16 @@
                 </div>
             </div>
             <div class="certificate">
-                <img src="/assets/images/certificate_01.jpg" alt="">
+                <img v-lazyload data-src="/assets/images/certificate_01.jpg"
+                    src="/assets/images/certificate_01_backplate.svg" alt="">
             </div>
         </div>
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { vLazyload } from '../directives/lazyload';
+</script>
 
 <style lang="scss" scoped>
 .about-me {

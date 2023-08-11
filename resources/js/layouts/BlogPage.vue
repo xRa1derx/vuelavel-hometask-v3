@@ -21,16 +21,12 @@
                 <div class="blog-post__body">
                     <div class="blog-post__images-container" ref="imageContainer">
                         <div class="blog-post__image-wrap --last-image">
-                            <!-- <img class="blog__image" src="https://unsplash.it/1200/600?image=1026" alt=""> -->
-                            <img class="blog-post__image"
-                                src="https://thumb.cloud.mail.ru/weblink/thumb/xw1/4vFU/oobTmaLnH/IMG_9360.JPG" alt="">
+                            <img class="blog-post__image" v-lazyload
+                                data-src="https://thumb.cloud.mail.ru/weblink/thumb/xw1/4vFU/oobTmaLnH/IMG_9360.JPG" alt="">
 
                         </div>
-                        <!-- <img src="https://unsplash.it/301" alt=""> -->
                     </div>
-                    <!-- post-content -->
                     <div class="blog-post__content-container blog-post__content-container--hidden">
-                        <!-- ql-editor -->
                         <p class="blog-post__content-text" ref="post">
                             Я давно хотела черкнуть пару строк о влиянии физического развития на умственное – может кому и
                             будут
@@ -286,6 +282,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import TexareaCommentComponent from '../components/Blog/TextareaCommentComponent.vue'
+import { vLazyload } from '../directives/lazyload';
 // import axios from "axios";
 const sidebar = ref<HTMLInputElement | null>(null);
 function openSidebar() {

@@ -14,7 +14,8 @@
                 <div class="greetings-page__primary-image">
                     <div class="teacher">
                         <div class="teacher__container">
-                            <img class="teacher__img" src="/assets/images/teacher.png" alt="" />
+                            <img v-lazyload data-src="/assets/images/teacher.png" data-class="--fade" src="/assets/images/teacher_backplate.svg"
+                                class="teacher__img --fade" alt="" />
                         </div>
                     </div>
                 </div>
@@ -47,11 +48,14 @@ import { ref } from "vue";
 import AbouteMePage from "../layouts/AboutMePage.vue";
 import ServicePage from "../layouts/ServicePage.vue";
 import SendMailComponent from "../components/SendMailComponent.vue";
+import { vLazyload } from '../directives/lazyload';
 
 const isEmailOpen = ref<boolean>(false);
 function sendEmailOpen() {
     isEmailOpen.value = !isEmailOpen.value;
 }
+
+
 </script>
 <style scoped lang="scss">
 .wrapper {
@@ -109,6 +113,22 @@ function sendEmailOpen() {
                     width: 60%;
                     margin: auto;
 
+                    .teacher__container {
+                        .--fade {
+                            animation: fade 0.3s linear infinite alternate;
+                        }
+
+                        @keyframes fade {
+                            0% {
+                                opacity: 0;
+                            }
+
+                            100% {
+                                opacity: 1;
+                            }
+                        }
+                    }
+
                     .teacher__container::before {
                         content: "";
                         position: absolute;
@@ -153,7 +173,7 @@ function sendEmailOpen() {
                         border-radius: 50%;
                     }
 
-                    .phone-link__button:hover{
+                    .phone-link__button:hover {
                         background-color: $muted;
                     }
 
@@ -172,7 +192,8 @@ function sendEmailOpen() {
                         height: 100%;
                     }
                 }
-                .telegram-link:hover{
+
+                .telegram-link:hover {
                     background-color: #3390ec;
                 }
             }
