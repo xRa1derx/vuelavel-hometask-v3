@@ -1,6 +1,6 @@
 <template>
     <div class="about-me">
-        <div class="about-me__container">
+        <div class="about-me__container" ref="aboutMePage">
 
             <div class="first-col-skills">
                 <div class="skills__card1">
@@ -39,12 +39,41 @@
                 <img v-lazyload data-src="/assets/images/certificate_01.jpg" class="certificate__img --fade"
                     src="/assets/images/certificate_01_backplate.svg" alt="">
             </div>
+            <div class="about-me__scroll-right" @click="slide()" ref="scrollRight"><img src="/assets/images/arrow-right.svg"
+                    alt=""></div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue';
 import { vLazyload } from '../directives/lazyload';
+import debounce from '../composables/debounce'
+const aboutMePage = ref<HTMLInputElement | null>(null);
+const scrollRight = ref<HTMLInputElement | null>(null);
+
+onMounted(() => aboutMePage.value.addEventListener('scroll', checkHorizontalScrollPosition));
+
+onUnmounted(() => aboutMePage.value?.removeEventListener('scroll', checkHorizontalScrollPosition));
+
+const checkHorizontalScrollPosition = debounce((el: Event & {
+    target: HTMLButtonElement
+}) => {
+    const { target } = el;
+    if (target?.scrollLeft > 50) {
+        scrollRight.value.style.display = 'none';
+    } else {
+        scrollRight.value.style.display = 'block';
+    }
+}, 500)
+
+function slide() {
+    const rightScrollPoint = aboutMePage.value.scrollWidth - aboutMePage.value.clientWidth;
+    aboutMePage.value.scrollTo({
+        left: rightScrollPoint,
+        behavior: "smooth",
+    });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -52,7 +81,22 @@ import { vLazyload } from '../directives/lazyload';
     width: 100%;
     background-color: #fff;
 
+    ::-webkit-scrollbar {
+        height: 20px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: $muted;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: $bg-grey;
+        border-radius: 20px;
+        border: 5px solid $muted;
+    }
+
     .about-me__container {
+        position: relative;
         display: flex;
         align-items: center;
         margin: 0 auto;
@@ -62,10 +106,11 @@ import { vLazyload } from '../directives/lazyload';
 
         .certificate {
             flex: 0 0 90%;
-            width: 355px;
+            width: 315px;
             box-shadow: -11px 20px 18px 0px rgba(0, 0, 0, 0.25);
             border-radius: 20px;
             margin-left: 1rem;
+            max-width: 315px;
 
             .certificate__img {
                 height: 100%;
@@ -119,7 +164,7 @@ import { vLazyload } from '../directives/lazyload';
         .second-col-skills {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
 
             .skills__card4 {
                 width: 250px;
@@ -166,6 +211,18 @@ import { vLazyload } from '../directives/lazyload';
             }
         }
 
+        .about-me__scroll-right {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 0.5rem;
+            right: 1rem;
+
+            img {
+                pointer-events: none;
+                height: 100%;
+            }
+        }
 
     }
 }
@@ -178,6 +235,23 @@ import { vLazyload } from '../directives/lazyload';
 
             .certificate {
                 max-width: 355px;
+            }
+        }
+    }
+}
+
+@media (min-width: 837px) {
+    .about-me {
+        .about-me__container {
+            margin: 0 auto;
+            padding: 8rem 1rem;
+
+            .certificate {
+                flex: 0 1 100%;
+            }
+
+            .button-right {
+                display: none !important;
             }
         }
     }
@@ -234,6 +308,10 @@ import { vLazyload } from '../directives/lazyload';
 @media (min-width: 1000px) {
     .about-me {
         .about-me__container {
+            .certificate {
+                flex: 0 0 90%;
+            }
+
             .first-col-skills {
 
                 .skills__card1 {

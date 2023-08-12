@@ -14,6 +14,19 @@ import TheHeader from "./components/TheHeader.vue";
 
 const authStore = useAuthStore();
 
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const loading = document.getElementById('loading');
+        document.getElementById('app').style.opacity = '1';
+        document.body.style.overflow = 'auto';
+        loading.style.opacity = '0';
+        setTimeout(() => {
+            loading.style.display = 'none';
+            loading.remove();
+        }, 300);
+    }, 200);
+}, { once: true });
+
 onMounted(async () => {
     await axios.get("api").then((res) => {
         // не авторизован, но с localStorage
@@ -48,6 +61,8 @@ onMounted(async () => {
 
 <style lang="scss">
 #app {
+    opacity: 0;
+    transition: opacity 0.3s linear;
     background-color: $bg-dark;
 }
 
@@ -115,8 +130,9 @@ onMounted(async () => {
 
 @keyframes fade {
     0% {
-        opacity: 0;
+        opacity: 0.7;
     }
+
     100% {
         opacity: 1;
     }

@@ -9,7 +9,7 @@ export const vLazyload = {
                     loadImages();
                     entry.target.addEventListener("load", () => {
                         entry.target.classList.remove("--fade");
-                    });
+                    }, { once: true });
                     observer.unobserve(el);
                 }
             });
