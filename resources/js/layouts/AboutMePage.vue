@@ -250,7 +250,7 @@ function slide() {
                 flex: 0 1 100%;
             }
 
-            .button-right {
+            .about-me__scroll-right {
                 display: none !important;
             }
         }
