@@ -1,0 +1,60 @@
+@import "./variables";
+
+@mixin btn() {
+    border-radius: 10px;
+    padding: 0.1rem 1rem;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        color: $accent-secondary;
+        box-shadow: inset rgba(0, 0, 0, 0.205) 0px 0px 15px 1px;
+    }
+}
+
+.btn {
+    @include btn();
+}
+
+.btn--active {
+    @include btn();
+    box-shadow: inset 0 0 15px 1px rgba(0, 0, 0, 0.63);
+}
+
+
+
+.closeModal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity ease 0.5s;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.closeModal::before,
+.closeModal::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    display: block;
+    width: 24px;
+    height: 3px;
+    background:  #fff;
+}
+
+.closeModal::before {
+    transform: rotate(45deg);
+}
+
+.closeModal::after {
+    transform: rotate(-45deg);
+}
