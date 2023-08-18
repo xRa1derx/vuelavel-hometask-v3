@@ -35,8 +35,9 @@ export const useAuthStore = defineStore('authStore', () => {
                 user.value.username = data.name;
                 user.value.isAuth = true;
                 data.is_admin ? user.value.isAdmin = true : user.value.isAdmin = false;
+                console.log(user.value);
 
-                router.push({ name: data.is_admin ? 'admin' : 'dashboard' });
+                // router.push({ name: data.is_admin ? 'admin' : 'dashboard' });
             });
             return result;
         });
