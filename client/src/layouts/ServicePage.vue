@@ -153,6 +153,11 @@ function showCourse(course = {}) {
         .service__course-description-body {
             padding-bottom: 1rem;
             color: $muted;
+
+            & :nth-child(1) {
+                max-height: 50vh;
+                overflow: auto;
+            }
         }
 
         .service__cost {

@@ -13,7 +13,7 @@
 import axios from 'axios';
 import { onMounted } from 'vue';
 
-onMounted(() => axios.get('/api/admin').then(res => console.log(res)
+onMounted(() => axios.get('/api/posts').then(res => console.log(res)
 ).catch(err => console.log(err)
 ))
 </script>

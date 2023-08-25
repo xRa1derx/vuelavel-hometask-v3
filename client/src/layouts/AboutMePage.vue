@@ -113,7 +113,6 @@ function slide() {
             max-width: 315px;
 
             .certificate__img {
-                height: 100%;
                 border-radius: 20px;
             }
         }
