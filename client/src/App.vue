@@ -114,6 +114,18 @@ onMounted(async () => {
     opacity: 0;
 }
 
+// .slideback-leave-active,
+// .slideback-enter-active {
+//   transition: 1s;
+// }
+// .slideback-enter {
+//   transform: translate(-100%, 0);
+// }
+// .slideback-leave-to {
+//   transform: translate(100%, 0);
+// }
+
+
 // errors
 
 .errors-enter-from {

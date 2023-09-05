@@ -36,8 +36,20 @@
                 </div>
             </div>
             <div class="certificate">
-                <img v-lazyload data-src="/assets/images/certificate_01.jpg" class="certificate__img --fade"
-                    src="/assets/images/certificate_01_backplate.svg" alt="">
+                <BaseLightBox :index="currentImageIndex" :imagesLength='certificateImages.length'
+                    :images="certificateImages">
+                    <template #image="{ show }">
+                        <img @click="show" v-lazyload data-src="/assets/images/certificate_01.jpg"
+                            class="certificate__img --fade" src="/assets/images/certificate_01_backplate.svg" alt=""
+                            ref="certificateImage">
+                    </template>
+                </BaseLightBox>
+                <div class="certificate__control">
+                    <template v-for="(snap, index) in certificateImages">
+                        <button class="certificate__control-button" :class="{ '--active': index === currentImageIndex }"
+                            @click="certificateSlider(index)"></button>
+                    </template>
+                </div>
             </div>
             <div class="about-me__scroll-right" @click="slide()" ref="scrollRight"><img src="/assets/images/arrow-right.svg"
                     alt=""></div>
@@ -47,10 +59,19 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { vLazyload } from '../directives/lazyload';
+import { vLazyload } from '@/directives/lazyload';
+import BaseLightBox from '@/components/UI/BaseLightBox.vue'
 import debounce from '../composables/debounce'
 const aboutMePage = ref<HTMLInputElement | null>(null);
 const scrollRight = ref<HTMLInputElement | null>(null);
+const certificateImage = ref<HTMLInputElement | null>(null);
+const currentImageIndex = ref(0);
+const certificateImages = ref([
+    { name: '/assets/images/certificate_01.jpg' },
+    { name: '/assets/images/certificate_02.png' },
+    { name: '/assets/images/certificate_03.png' },
+    { name: '/assets/images/certificate_04.jpg' }
+]);
 
 onMounted(() => aboutMePage.value!.addEventListener('scroll', checkHorizontalScrollPosition));
 
@@ -73,6 +94,12 @@ function slide() {
         left: rightScrollPoint,
         behavior: "smooth",
     });
+}
+
+function certificateSlider(index) {
+    currentImageIndex.value = index;
+    certificateImage.value!.dataset.src = certificateImages.value[index].name;
+    certificateImage.value!.src = certificateImages.value[index].name;
 }
 </script>
 
@@ -100,11 +127,12 @@ function slide() {
         display: flex;
         align-items: center;
         margin: 0 auto;
-        padding: 3rem 1rem;
+        padding: 3rem 0.5rem;
         text-align: center;
         overflow-x: auto;
 
         .certificate {
+            position: relative;
             flex: 0 0 90%;
             width: 315px;
             box-shadow: -11px 20px 18px 0px rgba(0, 0, 0, 0.25);
@@ -112,8 +140,30 @@ function slide() {
             margin-left: 1rem;
             max-width: 315px;
 
+
             .certificate__img {
                 border-radius: 20px;
+                cursor: pointer;
+            }
+
+            .certificate__control {
+                position: absolute;
+                left: 0;
+                right: 0;
+
+                .certificate__control-button {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    border: none;
+                    margin-right: 5px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                }
+
+                .--active {
+                    background-color: $bg-dark;
+                }
             }
         }
 
@@ -145,7 +195,7 @@ function slide() {
                 display: flex;
                 border-radius: 20px;
                 background-color: #242424;
-                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                box-shadow: -4px 6px 4px 0px rgba(0, 0, 0, 0.25);
 
                 p {
                     align-self: center;
@@ -190,7 +240,7 @@ function slide() {
                 display: flex;
                 border-radius: 20px;
                 background-color: #242424;
-                box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                box-shadow: -4px 6px 4px 0px rgba(0, 0, 0, 0.25);
 
                 p {
                     align-self: center;

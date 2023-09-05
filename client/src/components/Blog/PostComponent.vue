@@ -14,11 +14,15 @@
             <div @click="moreImages()" class="blog-post__images-container"
                 :class="{ '--images-hidden': countImages(post.images.length) }" ref="imagesContainer">
                 <template v-for="(image, index) in post.images">
-                    <div class="blog-post__image-wrap" :class="{
-                        '--last-image': index === post.images.length - 1 && post.images.length % 2 != 0,
-                    }">
-                        <img class="blog-post__image" v-lazyload :data-src='image.name' alt="">
-                    </div>
+                    <BaseLightBox :index="index" :imagesLength='post.images.length' :images="post.images">
+                        <template #image="{ show }">
+                            <div @click="show" class="blog-post__image-wrap" :class="{
+                                '--last-image': index === post.images.length! - 1 && post.images.length! % 2 != 0,
+                            }">
+                                <img class="blog-post__image" v-lazyload :data-src='image.name' alt="">
+                            </div>
+                        </template>
+                    </BaseLightBox>
                 </template>
             </div>
             <div class="blog-post__content-container" ref="contentContainer">
@@ -66,8 +70,10 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue';
-import TexareaCommentComponent from './TextareaCommentComponent.vue';
 import { vLazyload } from '@/directives/lazyload';
+import TexareaCommentComponent from './TextareaCommentComponent.vue';
+import BaseLightBox from '../UI/BaseLightBox.vue';
+
 
 const imagesContainer = ref<HTMLInputElement | null>(null);
 const contentContainer = ref<HTMLInputElement | null>(null);
@@ -99,7 +105,7 @@ function showMoreText() {
     showMoreButton.value!.style.display = "none";
 }
 
-function countImages(length) {
+function countImages(length: any) {
     if (length >= 3) {
         nextTick(() => {
             [...imagesContainer.value?.children as HTMLCollectionOf<HTMLElement>].forEach((child) => {
@@ -116,8 +122,21 @@ const props = defineProps({
 </script>
 
 <style scoped lang="scss">
+.blog-post__image-wrap {
+    .blog-post__image {
+        object-fit: cover;
+        width: 100%;
+        height: 250px;
+        cursor: pointer;
+        position: relative;
+        animation: fade 1s linear;
+        // visibility: hidden;
+        background-color: #1a1a1a;
+    }
+}
+
 .blog-post__container {
-    margin: 0 0.7rem 3rem 1rem;
+    margin: 0 0.4rem 3rem 0.5rem;
 
     &:nth-child(even) {
         background-color: $bg-grey;
@@ -164,30 +183,17 @@ const props = defineProps({
             display: grid;
             gap: 0.3rem;
             grid-template-columns: repeat(2, 1fr);
+        }
 
-            .blog-post__image-wrap {
-                .blog-post__image {
-                    object-fit: cover;
-                    width: 100%;
-                    height: 250px;
-                    cursor: pointer;
-                    position: relative;
-                    animation: fade 1s linear;
-                    // visibility: hidden;
-                    background-color: #1a1a1a;
-                }
-            }
-
-            .--last-image .blog-post__image {
-                object-fit: contain;
-            }
-
+        .--last-image .blog-post__image {
+            object-fit: contain;
         }
 
         .--last-image {
             grid-column: 1 / 3;
             width: 100%;
             margin: auto;
+            z-index: 50;
         }
 
         .--images-hidden {

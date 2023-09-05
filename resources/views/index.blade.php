@@ -50,4 +50,4 @@
       100% {
         opacity: 1;
       }
-    }</style><title></title><script defer="defer" src="/js/chunk-vendors.65212406.js"></script><script defer="defer" src="/js/app.750898e9.js"></script><link href="/css/app.cad2792e.css" rel="stylesheet"></head><body><div id="app"></div><div id="loading"><span class="dots">.</span><span class="dots">.</span><span class="dots">.</span></div></body></html>
+    }</style><title></title><script defer="defer" src="/js/chunk-vendors.c81ab661.js"></script><script defer="defer" src="/js/app.934e419b.js"></script><link href="/css/app.4df89d81.css" rel="stylesheet"></head><body><div id="app"></div><div id="loading"><span class="dots">.</span><span class="dots">.</span><span class="dots">.</span></div></body></html>

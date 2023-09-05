@@ -12,7 +12,8 @@
                             @click="$router.push({ name: 'home' })">Главная</button></li>
                     <li><button class="btn" v-if="$route.name !== 'blog'"
                             @click="$router.push({ name: 'blog' })">Блог</button></li>
-                    <li><button class="btn">Материалы</button></li>
+                    <li><button class="btn" v-if="$route.name !== 'materials'"
+                            @click="$router.push({ name: 'materials' })">Материалы</button></li>
                 </ul>
             </nav>
             <div v-if="authStore.user.isAuth" class="header__logout">
@@ -89,7 +90,7 @@ function logout() {
 .header {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 0.5rem;
 
     .logo {
         line-height: 18px;
@@ -118,6 +119,12 @@ function logout() {
         }
 
         .header__logout {
+            background-color: $bg-grey;
+            padding-bottom: 3px;
+            border-bottom-right-radius: 7px;
+            border-bottom-left-radius: 7px;
+            z-index: 1;
+
             .header__logout-btn {
                 margin-top: 1rem;
                 font-size: 1.5rem;
@@ -129,8 +136,9 @@ function logout() {
     .header__login {
         align-self: center;
         position: absolute;
-        right: 1rem;
+        right: 0.5rem;
         top: 4rem;
+        z-index: 1;
 
         .header__login-btn {
             width: 30px;
@@ -151,10 +159,11 @@ function logout() {
     .header__dashboard {
         align-self: center;
         position: absolute;
-        right: 1rem;
+        right: 0.5rem;
         top: 4rem;
         width: 30px;
         height: 30px;
+        z-index: 1;
 
         .header__dashboard-btn {
             padding: 0;
@@ -192,7 +201,7 @@ function logout() {
             overflow: auto;
             background-color: $bg-grey;
             transition: all 0.3s ease 0s;
-            z-index: 1;
+            z-index: 2;
         }
 
         .active-menu {
@@ -203,10 +212,11 @@ function logout() {
 
 @media (min-width: 601px) {
     .header {
-        grid-column: 2 / 5;
-        grid-row: 1 / -1;
+        // grid-column: 2 / 5;
+        // grid-row: 1 / -1;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 1fr;
         margin: auto;
         max-width: 1000px;
         width: 100%;
@@ -247,7 +257,7 @@ function logout() {
             .header__logout {
                 position: absolute;
                 right: 0;
-                top: 4rem;
+                top: 4.5rem;
                 margin-right: 0.5rem;
 
                 .header__logout-btn {

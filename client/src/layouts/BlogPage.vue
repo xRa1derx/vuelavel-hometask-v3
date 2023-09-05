@@ -190,8 +190,8 @@ onMounted(() => {
 
         .blog__sidebar-open {
             position: absolute;
-            left: 1rem;
-            top: 4.1rem;
+            left: 0.5rem;
+            top: 4rem;
             transition: transform 0.6s ease;
 
             .blog__sidebar-image {
@@ -209,9 +209,9 @@ onMounted(() => {
 .blog__container {
     display: flex;
     max-width: 1000px;
-    height: calc(100vh - 117px);
+    height: calc(100vh - 52px);
     margin: auto;
-    margin-top: 45px;
+    padding-top: 3rem;
 
     .blog__sidebar-container {
         flex: 0 0 0%;
@@ -223,16 +223,20 @@ onMounted(() => {
 
     .sidebar--open {
         flex: 0 0 25%;
-        margin-left: 1rem;
+        margin-left: 0.5rem;
     }
 }
 
 @media (min-width: 601px) {
+    .blog__container {
+        height: calc(100vh - 72px);
+    }
+
     .blog {
         .blog__sidebar-container {
             display: flex;
             flex: 0 0 25%;
-            margin-left: 1rem;
+            margin-left: 0.5rem;
         }
 
         .blog-post {
@@ -277,24 +281,5 @@ onMounted(() => {
 .blog-post::-webkit-scrollbar-thumb:active {
     background-color: #999999;
     border: 1px solid #333333;
-}
-
-
-
-.slide-enter-active {
-    // transition: all 0.3s ease-in;
-}
-
-.slide-leave-active {
-    // transition: all 0.2s ease-out;
-}
-
-.slide-enter-from {
-    // left: 200px;
-}
-
-.slide-leave-to {
-    // opacity: 0;
-    // transform: translateX(-30px);
 }
 </style>

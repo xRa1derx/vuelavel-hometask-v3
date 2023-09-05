@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import VueGet from "../components/VueGet.vue";
 import HomePage from "../layouts/HomePage.vue";
-import AdminPage from "../layouts/AdminPage.vue";
 import BlogPage from '../layouts/BlogPage.vue';
+import MaterialsPage from '../layouts/MaterialsPage.vue'
 import NotFound from '../layouts/NotFound.vue';
 import { useAuthStore } from "../stores/authStore";
 
@@ -35,8 +35,16 @@ const router = createRouter({
             }
         },
         {
+            path: "/materials",
+            component: MaterialsPage,
+            name: "materials",
+            meta: {
+                title: 'Materials'
+            }
+        },
+        {
             path: "/admin",
-            component: AdminPage,
+            component: () => import(/* webpackChunkName: "admin-page" */ '../layouts/AdminPage.vue'),
             name: "admin",
             meta: {
                 middleware: 'admin',
@@ -60,7 +68,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
-    document.title = `${to.meta.title} - ${process.env.MIX_APP_NAME}`;
+    document.title = `${to.meta.title} - My Hometask`;
     if (to.meta.middleware == "admin") {
         if (authStore.user.isAdmin) {
             next();
