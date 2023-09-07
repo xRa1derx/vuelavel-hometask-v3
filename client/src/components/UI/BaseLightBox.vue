@@ -8,7 +8,8 @@
                     <div class="lightbox__close-button" @click.stop="hide"></div>
                     <transition-group name="opacity" tag="div" class="lightbox__transition">
                         <div v-for="index in [indexLightBox]" v-bind:key="index" class="lightbox__image" @click.stop>
-                            <img v-lazyload :data-src="images![indexLightBox].name" :src="images![indexLightBox].name">
+                            <img v-lazyload :data-src="`/assets/${images![indexLightBox].path}`"
+                                :src="`/assets/${images![indexLightBox].path}`">
                         </div>
                     </transition-group>
                     <div class="lightbox__slider">

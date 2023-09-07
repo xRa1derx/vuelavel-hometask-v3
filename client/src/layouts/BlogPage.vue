@@ -1,7 +1,26 @@
 <template>
     <section class="blog blog__container">
         <aside class="blog__sidebar blog__sidebar-container" ref="sidebar">
-            <div></div>
+            <nav v-if="pagination.total > 3">
+                <ul>
+                    <li>
+                        <button @click="getPosts(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
+                            Previous
+                        </button>
+                    </li>
+                    <li>
+                        <button disabled>
+                            Page {{ pagination.current_page }} of
+                            {{ pagination.last_page }}
+                        </button>
+                    </li>
+                    <li>
+                        <button @click.prevent="getPosts(pagination.next_page_url)" :disabled="!pagination.next_page_url">
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </aside>
         <div class="blog-post">
             <div class="blog__sidebar-open" @click="openSidebar()">
@@ -25,19 +44,53 @@ interface Post {
     current_page: number
 }
 
+interface Pagination {
+    total: number,
+    current_page: number,
+    last_page: number,
+    prev_page_url: string,
+    next_page_url: string,
+}
+
 const sidebar = ref<HTMLInputElement | null>(null);
 const posts = ref<Post[]>();
-function openSidebar() {
-    sidebar.value!.classList.toggle('sidebar--open');
-}
-function getPosts() {
-    axios.get('/api/posts')
-        .then(res => posts.value = res.data.data)
-        .catch(err => console.log(err))
-}
+const pagination = ref<Pagination>({
+    total: 0,
+    current_page: 0,
+    last_page: 0,
+    prev_page_url: '',
+    next_page_url: '',
+});
+
 onMounted(() => {
     getPosts();
 })
+
+function openSidebar() {
+    sidebar.value!.classList.toggle('sidebar--open');
+}
+function getPosts(page_url = "/api/posts") {
+    axios.get(page_url)
+        .then(res => {
+            posts.value = res.data.data;
+            makePagination(res.data)
+        })
+        .catch(err => console.log(err))
+}
+
+function makePagination(response: any) {
+    let createPagination = {
+        current_page: response.current_page,
+        last_page: response.last_page,
+        prev_page_url: response.prev_page_url,
+        next_page_url: response.next_page_url,
+        // current_page_url: `${response.path}?page=${response.current_page}`,
+        total: response.total,
+        // totalCountOnCurrentPage: response.data.length,
+    };
+    pagination.value = createPagination;
+}
+
 // import BaseLightbox from "../UI/BaseLightBox.vue";
 // import CommentTextarea from "../Comments/CommentTextarea.vue";
 // import BaseSuccessAddComment from "../UI/BaseSuccessAddComment.vue";

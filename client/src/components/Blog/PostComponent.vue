@@ -19,7 +19,8 @@
                             <div @click="show" class="blog-post__image-wrap" :class="{
                                 '--last-image': index === post.images.length! - 1 && post.images.length! % 2 != 0,
                             }">
-                                <img class="blog-post__image" v-lazyload :data-src='image.name' alt="">
+                                <img class="blog-post__image" v-lazyload :data-src='`/assets/images/posts/${image.preview}`'
+                                    alt="">
                             </div>
                         </template>
                     </BaseLightBox>
