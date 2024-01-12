@@ -1,35 +1,26 @@
 <?php
 
-use App\Http\Controllers\Admin\IndexController;
-use App\Http\Controllers\GetController;
+use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailSenderController;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Admin\Post\AdminPostController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::get('/', [HomeController::class, 'index']);
-// Route::get('posts', [PostController::class, 'index']);
 Route::post('/sendMail', [MailSenderController::class, 'sendMail']);
 
 Route::resource('/posts', PostController::class);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('admin', [IndexController::class, 'index']);
-    Route::get('dashboard', [GetController::class, 'get']);
+    Route::resources([
+        'admin/users' => UserController::class,
+        'admin/user' => UserController::class,
+    ]);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('/post', AdminPostController::class);
 });

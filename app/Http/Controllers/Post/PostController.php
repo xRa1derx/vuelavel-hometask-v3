@@ -11,8 +11,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        // $posts = Post::with('tags', 'category', 'images', 'commentsQuantity')->latest()->paginate(3);
-        // return $posts;
-        return new PostResource(Post::with('tags', 'category', 'images', 'commentsQuantity')->latest()->paginate(3));
+        $posts = Post::with('tags', 'category', 'images', 'commentsQuantity')->latest()->paginate(3);
+        return $posts;
+        // return new PostResource(Post::with('tags', 'category', 'images', 'commentsQuantity')->latest()->paginate(3));
     }
 }

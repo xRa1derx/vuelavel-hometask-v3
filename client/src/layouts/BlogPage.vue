@@ -1,22 +1,28 @@
 <template>
     <section class="blog blog__container">
         <aside class="blog__sidebar blog__sidebar-container" ref="sidebar">
-            <nav v-if="pagination.total > 3">
-                <ul>
-                    <li>
-                        <button @click="getPosts(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">
-                            Previous
-                        </button>
-                    </li>
-                    <li>
+            <nav class="pagination" v-if="pagination.total > 3">
+                <ul class="pagination__list">
+                    <li class="pagination__pages">
                         <button disabled>
-                            Page {{ pagination.current_page }} of
+                            Страница {{ pagination.current_page }} из
                             {{ pagination.last_page }}
                         </button>
                     </li>
-                    <li>
-                        <button @click.prevent="getPosts(pagination.next_page_url)" :disabled="!pagination.next_page_url">
-                            Next
+                    <li class="pagination__control">
+                        <button
+                            class="pagination__prev"
+                            @click="getPosts(pagination.prev_page_url)"
+                            :disabled="!pagination.prev_page_url"
+                        >
+                            &lt;
+                        </button>
+                        <button
+                            class="pagination__next"
+                            @click.prevent="getPosts(pagination.next_page_url)"
+                            :disabled="!pagination.next_page_url"
+                        >
+                            &gt;
                         </button>
                     </li>
                 </ul>
@@ -24,71 +30,57 @@
         </aside>
         <div class="blog-post">
             <div class="blog__sidebar-open" @click="openSidebar()">
-                <img class="blog__sidebar-image" src="/assets/images/sidebar-open.svg" alt="">
+                <img
+                    class="blog__sidebar-image"
+                    src="/assets/images/sidebar-open.svg"
+                    alt=""
+                />
             </div>
-            <template v-for="post in posts">
-                <PostComponent :post="post" />
-            </template>
+            <BlogPostsComponent
+                ref="blogPostComponent"
+                @paginationData="paginationData"
+            >
+                <template #textarea>
+                    <TextareaCommentComponent />
+                </template>
+            </BlogPostsComponent>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import PostComponent from '@/components/Blog/PostComponent.vue';
-import axios from 'axios';
-
-interface Post {
-    data: [],
-    links: [],
-    current_page: number
-}
+import { ref } from "vue";
+import BlogPostsComponent from "@/components/Blog/BlogPostsComponent.vue";
+import TextareaCommentComponent from "@/components/Blog/TextareaCommentComponent.vue";
 
 interface Pagination {
-    total: number,
-    current_page: number,
-    last_page: number,
-    prev_page_url: string,
-    next_page_url: string,
+    total: number;
+    current_page: number;
+    last_page: number;
+    prev_page_url: string;
+    next_page_url: string;
 }
 
+const blogPostComponent = ref();
 const sidebar = ref<HTMLInputElement | null>(null);
-const posts = ref<Post[]>();
 const pagination = ref<Pagination>({
     total: 0,
     current_page: 0,
     last_page: 0,
-    prev_page_url: '',
-    next_page_url: '',
+    prev_page_url: "",
+    next_page_url: "",
 });
 
-onMounted(() => {
-    getPosts();
-})
+function getPosts(val: string) {
+    blogPostComponent.value.getPosts(val);
+}
 
 function openSidebar() {
-    sidebar.value!.classList.toggle('sidebar--open');
-}
-function getPosts(page_url = "/api/posts") {
-    axios.get(page_url)
-        .then(res => {
-            posts.value = res.data.data;
-            makePagination(res.data)
-        })
-        .catch(err => console.log(err))
+    sidebar.value!.classList.toggle("sidebar--open");
 }
 
-function makePagination(response: any) {
-    let createPagination = {
-        current_page: response.current_page,
-        last_page: response.last_page,
-        prev_page_url: response.prev_page_url,
-        next_page_url: response.next_page_url,
-        // current_page_url: `${response.path}?page=${response.current_page}`,
-        total: response.total,
-        // totalCountOnCurrentPage: response.data.length,
-    };
-    pagination.value = createPagination;
+function paginationData(val: Pagination) {
+    pagination.value = val;
 }
 
 // import BaseLightbox from "../UI/BaseLightBox.vue";
@@ -96,148 +88,166 @@ function makePagination(response: any) {
 // import BaseSuccessAddComment from "../UI/BaseSuccessAddComment.vue";
 // import BaseSpinner from "../UI/BaseSpinner.vue";
 
-    // emits: ["loading", "commentLink"],
-    // props: ["current_page_url"],
-    // data() {
-    //     return {
-    //         posts: [],
-    //         pagination: {},
-    //         loading: false,
-    //         newCommentNotification: false,
-    //         alertMessages: [
-    //             { text: "Success!", width: 65 },
-    //             {
-    //                 text: "Wait a little while your comment will be checked!",
-    //                 width: 290,
-    //             },
-    //         ],
-    //     };
-    // },
-    // mounted() {
-    //     this.getPosts(this.current_page_url);
-    // },
-    // methods: {
-    //     ...mapActions({
-    //         getRole: "auth/role",
-    //         isLoginOpen: "loginOpen",
-    //     }),
-    //     scrollUp() {
-    //         const blog = document.querySelector(".blog");
-    //         if (blog) {
-    //             blog.scrollTop = 0;
-    //         }
-    //     },
-    //     commentsLink(id) {
-    //         if (localStorage.getItem("x_xsrf_token")) {
-    //             this.getRole();
-    //         }
-    //         this.$emit("commentLink", id, this.pagination.current_page_url);
-    //     },
-    //     getPosts(page_url, destination) {
-    //         page_url = page_url || "/api/admin/posts";
-    //         this.$emit("loading", true);
-    //         axios
-    //             .get(page_url)
-    //             .then((res) => {
-    //                 this.posts = res.data.data;
-    //                 this.makePagination(res.data);
-    //                 if (destination === "next") {
-    //                     this.scrollUp();
-    //                 }
-    //             })
-    //             .then(() => {
-    //                 this.$refs.imageContainer.forEach((element) => {
-    //                     const countImages = element.childElementCount;
-    //                     if (countImages >= 3) {
-    //                         [...element.children].forEach((child) => {
-    //                             child.style.zIndex = -1;
-    //                         });
-    //                     }
-    //                     if (
-    //                         element.nextElementSibling.firstChild
-    //                             .scrollHeight >= 300
-    //                     ) {
-    //                         element.nextElementSibling.classList.add(
-    //                             "post-content-hidden"
-    //                         );
-    //                         element.nextElementSibling.lastChild.style.display =
-    //                             "block";
-    //                     }
-    //                 });
-    //             })
-    //             .finally(() => {
-    //                 this.$emit("loading", false);
-    //             });
-    //     },
-    //     makePagination(response) {
-    //         let pagination = {
-    //             current_page: response.current_page,
-    //             last_page: response.last_page,
-    //             prev_page_url: response.prev_page_url,
-    //             next_page_url: response.next_page_url,
-    //             current_page_url: `${response.path}?page=${response.current_page}`,
-    //             total: response.total,
-    //             totalCountOnCurrentPage: response.data.length,
-    //         };
-    //         this.pagination = pagination;
-    //     },
-    //     getFullDate(post) {
-    //         let date = post.created_at.slice(0, 16).replace("T", " ");
-    //         let t = date.split(/[- :]/);
-    //         let time = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4]));
-    //         return time.toLocaleString("en-US", {
-    //             day: "numeric",
-    //             month: "short",
-    //             year: "numeric",
-    //         });
-    //     },
-    //     moreImages(post, event) {
-    //         const target = event.target;
-    //         if (target.classList.contains("post-image-container")) {
-    //             const images = document.getElementById(`${post.title}`);
-    //             images.style.maxHeight =
-    //                 Math.ceil(target.childElementCount / 2) * 275 + "px";
-    //             images.classList.remove("images-hidden");
-    //             images.classList.add("images-show");
-    //             [...images.children].forEach((child) => {
-    //                 child.style.zIndex = 0;
-    //             });
-    //         }
-    //     },
-    //     showMoreText(event) {
-    //         if (event.target) {
-    //             event.target.offsetParent.classList.remove(
-    //                 "post-content-hidden"
-    //             );
-    //             event.target.style.display = "none";
-    //         }
-    //     },
-    //     async addComment(___, text, post_id) {
-    //         let user_id = this.$store.state.auth.user.id || 0;
-    //         const data = { text, post_id, user_id, depth: 0, parent_id: null };
-    //         await axios.post("/api/user/comment/create", data).then(() => {
-    //             if (data.user_id !== 0) {
-    //                 this.getPosts();
-    //             }
-    //             this.newCommentNotification = true;
-    //         });
-    //     },
-    // },
-    // watch: {
-    //     newCommentNotification(val) {
-    //         if (val) {
-    //             setTimeout(() => {
-    //                 this.newCommentNotification = false;
-    //             }, 8000);
-    //         }
-    //     },
-    // },
+// emits: ["loading", "commentLink"],
+// props: ["current_page_url"],
+// data() {
+//     return {
+//         posts: [],
+//         pagination: {},
+//         loading: false,
+//         newCommentNotification: false,
+//         alertMessages: [
+//             { text: "Success!", width: 65 },
+//             {
+//                 text: "Wait a little while your comment will be checked!",
+//                 width: 290,
+//             },
+//         ],
+//     };
+// },
+// mounted() {
+//     this.getPosts(this.current_page_url);
+// },
+// methods: {
+//     ...mapActions({
+//         getRole: "auth/role",
+//         isLoginOpen: "loginOpen",
+//     }),
+//     scrollUp() {
+//         const blog = document.querySelector(".blog");
+//         if (blog) {
+//             blog.scrollTop = 0;
+//         }
+//     },
+//     commentsLink(id) {
+//         if (localStorage.getItem("x_xsrf_token")) {
+//             this.getRole();
+//         }
+//         this.$emit("commentLink", id, this.pagination.current_page_url);
+//     },
+//     getPosts(page_url, destination) {
+//         page_url = page_url || "/api/admin/posts";
+//         this.$emit("loading", true);
+//         axios
+//             .get(page_url)
+//             .then((res) => {
+//                 this.posts = res.data.data;
+//                 this.makePagination(res.data);
+//                 if (destination === "next") {
+//                     this.scrollUp();
+//                 }
+//             })
+//             .then(() => {
+//                 this.$refs.imageContainer.forEach((element) => {
+//                     const countImages = element.childElementCount;
+//                     if (countImages >= 3) {
+//                         [...element.children].forEach((child) => {
+//                             child.style.zIndex = -1;
+//                         });
+//                     }
+//                     if (
+//                         element.nextElementSibling.firstChild
+//                             .scrollHeight >= 300
+//                     ) {
+//                         element.nextElementSibling.classList.add(
+//                             "post-content-hidden"
+//                         );
+//                         element.nextElementSibling.lastChild.style.display =
+//                             "block";
+//                     }
+//                 });
+//             })
+//             .finally(() => {
+//                 this.$emit("loading", false);
+//             });
+//     },
+//     makePagination(response) {
+//         let pagination = {
+//             current_page: response.current_page,
+//             last_page: response.last_page,
+//             prev_page_url: response.prev_page_url,
+//             next_page_url: response.next_page_url,
+//             current_page_url: `${response.path}?page=${response.current_page}`,
+//             total: response.total,
+//             totalCountOnCurrentPage: response.data.length,
+//         };
+//         this.pagination = pagination;
+//     },
+//     getFullDate(post) {
+//         let date = post.created_at.slice(0, 16).replace("T", " ");
+//         let t = date.split(/[- :]/);
+//         let time = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4]));
+//         return time.toLocaleString("en-US", {
+//             day: "numeric",
+//             month: "short",
+//             year: "numeric",
+//         });
+//     },
+//     moreImages(post, event) {
+//         const target = event.target;
+//         if (target.classList.contains("post-image-container")) {
+//             const images = document.getElementById(`${post.title}`);
+//             images.style.maxHeight =
+//                 Math.ceil(target.childElementCount / 2) * 275 + "px";
+//             images.classList.remove("images-hidden");
+//             images.classList.add("images-show");
+//             [...images.children].forEach((child) => {
+//                 child.style.zIndex = 0;
+//             });
+//         }
+//     },
+//     showMoreText(event) {
+//         if (event.target) {
+//             event.target.offsetParent.classList.remove(
+//                 "post-content-hidden"
+//             );
+//             event.target.style.display = "none";
+//         }
+//     },
+//     async addComment(___, text, post_id) {
+//         let user_id = this.$store.state.auth.user.id || 0;
+//         const data = { text, post_id, user_id, depth: 0, parent_id: null };
+//         await axios.post("/api/user/comment/create", data).then(() => {
+//             if (data.user_id !== 0) {
+//                 this.getPosts();
+//             }
+//             this.newCommentNotification = true;
+//         });
+//     },
+// },
+// watch: {
+//     newCommentNotification(val) {
+//         if (val) {
+//             setTimeout(() => {
+//                 this.newCommentNotification = false;
+//             }, 8000);
+//         }
+//     },
+// },
 </script>
 
 <style lang="scss" scoped>
 .blog {
-    color: #fff;
-
+    .blog__sidebar {
+        display: flex;
+        .pagination {
+            width: 100%;
+            margin-top: auto;
+            .pagination__list {
+                list-style-type: none;
+                padding: 0;
+                li {
+                    button {
+                        width: 100%;
+                        color: #000000;
+                    }
+                }
+                .pagination__control {
+                    display: flex;
+                }
+            }
+        }
+    }
     .blog-post {
         overflow: auto;
 
@@ -270,13 +280,13 @@ function makePagination(response: any) {
         flex: 0 0 0%;
         height: calc(100% - 72px);
         background-color: $bg-grey;
-        margin-left: 0;
+        overflow: hidden;
         transition: all 0.5s ease;
     }
 
     .sidebar--open {
         flex: 0 0 25%;
-        margin-left: 0.5rem;
+        margin-right: 0.5rem;
     }
 }
 
@@ -310,29 +320,7 @@ function makePagination(response: any) {
     }
 }
 
-
-.blog-post::-webkit-scrollbar {
-    width: 0.5rem;
-    background-color: #242424f6;
-}
-
-.blog-post::-webkit-scrollbar:horizontal {
-    height: 12px;
-    margin-right: 20px;
-}
-
-.blog-post::-webkit-scrollbar-thumb {
-    background-color: #efe4e4;
-    border: 1px solid #000000;
-}
-
-.blog-post::-webkit-scrollbar-thumb:hover {
-    background-color: #d3c9c9;
-    border: 1px solid #333333;
-}
-
-.blog-post::-webkit-scrollbar-thumb:active {
-    background-color: #999999;
-    border: 1px solid #333333;
+:disabled {
+    color: #fff !important;
 }
 </style>

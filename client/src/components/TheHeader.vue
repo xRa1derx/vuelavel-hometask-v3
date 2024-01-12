@@ -109,6 +109,8 @@ function logout() {
 
         .header__nav {
             ul {
+                list-style-type: none;
+                padding: 0;
                 li {
                     button {
                         font-size: 1.5rem;

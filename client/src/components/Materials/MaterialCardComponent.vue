@@ -1,21 +1,45 @@
 <template>
     <div class="material-card" :class="{ offBoxShadow: isCardOpen }">
-        <div class="material-card__wrapper" :class="{ hideCard: isCardOpen }" @click="openCard()"
-            :style="{ backgroundColor: props.card?.style.backgroundColor }">
-            <div class="material-card__logo"> <img :src="props.card?.logo" alt=""> </div>
+        <div
+            class="material-card__wrapper"
+            ref="cardCover"
+            :class="{ hideCard: isCardOpen }"
+            @click="openCard()"
+            :style="{ backgroundColor: props.card?.style.backgroundColor }"
+        >
+            <div class="material-card__logo">
+                <img :src="props.card?.logo" alt="" />
+            </div>
         </div>
         <div class="material-card__sheet">
             <div class="material-card__sheet-header">
-                <img class="material-card__sheet-img" src="/assets/images/material-book.svg" alt="">
-                <p class="material-card__sheet-title">{{ props.card?.title }}</p>
+                <img
+                    class="material-card__sheet-img"
+                    src="/assets/images/material-book.svg"
+                    alt=""
+                />
+                <p class="material-card__sheet-title">
+                    {{ props.card?.title }}
+                </p>
             </div>
             <template v-for="(parts, __, index) of props.card?.files">
-                <ul class="material-card__files" v-if="index == isPartSelected">
+                <ul @click="test" class="material-card__files" v-if="index == isPartSelected">
                     <template v-for="file in parts">
                         <li class="material-card__file">
-                            <a class="material-card__file-link" :href="`${file.url}`" download>
-                                <span class="material-card__file-name">{{ file.name }}</span>
-                                <span v-if="file.author" class="material-card__file-author"> ({{ file.author }})</span>
+                            <a
+                                class="material-card__file-link"
+                                :href="`${file.url}`"
+                                download
+                            >
+                                <span class="material-card__file-name">{{
+                                    file.name
+                                }}</span>
+                                <span
+                                    v-if="file.author"
+                                    class="material-card__file-author"
+                                >
+                                    ({{ file.author }})</span
+                                >
                             </a>
                         </li>
                     </template>
@@ -23,9 +47,12 @@
             </template>
             <div class="material-card__parts">
                 <template v-for="(__, key, index) in props.card?.files">
-                    <div class="material-card__part" v-if="Object.keys(props.card?.files).length > 1"
-                        @click="selectPart(index)">
-                        <button> {{ key }}</button>
+                    <div
+                        class="material-card__part"
+                        v-if="Object.keys(props.card?.files).length > 1"
+                        @click="selectPart(index)"
+                    >
+                        <button>{{ key }}</button>
                     </div>
                 </template>
             </div>
@@ -34,23 +61,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const props = defineProps({
-    card: { type: Object, require: true }
+    card: { type: Object, require: true },
 });
+
+const cardCover = ref<HTMLInputElement | null>(null);
 
 const isCardOpen = ref(false);
 const isPartSelected = ref(0);
 
+function test(event){
+    console.dir(event.target.style.overflow);
+    event.target.style.overflow = 'scroll';
+    console.dir(event.target.style.overflow);
+}
+
 function openCard() {
     isCardOpen.value = !isCardOpen.value;
+    setTimeout(() => {
+        cardCover.value?.classList.add("hide");
+    }, 500);
 }
 
 function selectPart(index) {
     isPartSelected.value = index;
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -66,7 +103,6 @@ function selectPart(index) {
     -o-transition: 0.3s ease;
     transition: 0.3s ease;
 
-
     &:hover {
         box-shadow: none;
         -webkit-transform: scale(1.05);
@@ -75,7 +111,7 @@ function selectPart(index) {
         transform: scale(1.05);
     }
 
-    &:hover>.material-card__sheet {
+    &:hover > .material-card__sheet {
         box-shadow: none;
     }
 
@@ -94,14 +130,14 @@ function selectPart(index) {
         cursor: pointer;
 
         &::after {
-            content: '';
+            content: "";
             position: absolute;
             margin-left: auto;
             margin-right: auto;
             top: -3rem;
             left: 0;
             right: 0;
-            background-color: #F2F2F2;
+            background-color: #f2f2f2;
             width: 100px;
             height: 100px;
             border-radius: 50%;
@@ -139,7 +175,6 @@ function selectPart(index) {
         100% {
             top: 10vh;
             opacity: 0;
-            display: none;
         }
     }
 
@@ -155,7 +190,7 @@ function selectPart(index) {
         top: 0;
         left: 0;
         right: 0;
-        background-color: #F2F2F2;
+        background-color: #f2f2f2;
         padding-top: 6rem;
         margin-top: -6rem;
         box-shadow: 14px -2px 9px rgba(0, 0, 0, 0.25);

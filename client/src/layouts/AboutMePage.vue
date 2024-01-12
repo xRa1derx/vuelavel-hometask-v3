@@ -67,10 +67,10 @@ const scrollRight = ref<HTMLInputElement | null>(null);
 const certificateImage = ref<HTMLInputElement | null>(null);
 const currentImageIndex = ref(0);
 const certificateImages = ref([
-    { name: '/assets/images/certificate_01.jpg', path: '/images/certificate_01.jpg' },
-    { name: '/assets/images/certificate_02.png', path: '/images/certificate_02.png' },
-    { name: '/assets/images/certificate_03.png', path: '/images/certificate_03.png' },
-    { name: '/assets/images/certificate_04.jpg', path: '/images/certificate_04.jpg' }
+    { name: '/assets/images/certificate_01.jpg', path: 'assets/images/certificate_01.jpg' },
+    { name: '/assets/images/certificate_02.png', path: 'assets/images/certificate_02.png' },
+    { name: '/assets/images/certificate_03.png', path: 'assets/images/certificate_03.png' },
+    { name: '/assets/images/certificate_04.jpg', path: 'assets/images/certificate_04.jpg' }
 ]);
 
 onMounted(() => aboutMePage.value!.addEventListener('scroll', checkHorizontalScrollPosition));

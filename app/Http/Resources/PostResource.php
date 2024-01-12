@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -14,6 +16,18 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'created_at' => $this->created_at,
+            'category' => $this->category,
+            'comments' => $this->verifiedComments,
+            'images' => ImageResource::collection($this->images),
+            'tags' => $this->tags,
+            'all_tags' => Tag::all(),
+            'all_categories' => Category::where('title', '!=', $this->category->title)->get()
+        ];
     }
 }
