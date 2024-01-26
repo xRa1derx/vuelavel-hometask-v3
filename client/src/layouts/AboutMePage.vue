@@ -152,9 +152,9 @@ function certificateSlider(index) {
                 right: 0;
 
                 .certificate__control-button {
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 100vw;
                     border: none;
                     margin-right: 5px;
                     margin-left: 5px;

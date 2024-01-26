@@ -1,7 +1,5 @@
 <template>
-    <section>
-        <div>NEW MESSAGES</div>
-    </section>
+    <div>NEW MESSAGES</div>
 </template>
 
 <script setup lang="ts"></script>

@@ -76,6 +76,7 @@ onMounted(async () => {
         border-left: 2px solid $muted;
         padding-left: 1rem;
     }
+
     hr {
         border: none;
         border-top: 2px solid $muted;
@@ -141,34 +142,42 @@ onMounted(async () => {
     transform: translateY(30px);
 }
 
+.test-enter-from {
+    // transform: none;
+}
+
+.test-leave-to {
+    // transform: none;
+}
+
 //opacity
 
-.opacity-enter-from {
-    opacity: 0;
-}
+// .opacity-enter-from {
+//     opacity: 0;
+// }
 
-.opacity-enter-active {
-    transition: all 0.2s ease-in;
-}
+// .opacity-enter-active {
+//     transition: all 0.2s ease-in;
+// }
 
-.opacity-leave-active {
-    transition: all 0.3s ease-in-out;
-}
+// .opacity-leave-active {
+//     transition: all 0.3s ease-in-out;
+// }
 
-.opacity-leave-to {
-    opacity: 0;
-}
+// .opacity-leave-to {
+//     opacity: 0;
+// }
 
 // errors
 
 .errors-enter-active,
 .errors-leave-active {
-  transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
 }
 
 .errors-enter-from,
 .errors-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 .--fade {

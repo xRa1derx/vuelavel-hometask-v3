@@ -51,6 +51,7 @@ const router = createRouter({
             meta: {
                 middleware: "admin",
                 title: "Admin",
+                transition: 'route'
             },
             children: [
                 {
@@ -107,19 +108,23 @@ const router = createRouter({
                     },
                     component: () =>
                         import(
-                            "../components/Admin/Chat/ChatNewMessageComponent.vue"
+                            "../components/Admin/Chat/ChatStartComponent.vue"
                         ),
-                },
-                {
-                    path: "chat/:id",
-                    component: () =>
-                        import(
-                            "../components/Admin/Chat/ChatComponent.vue"
-                        ),
-                    name: "admin.chat.id",
-                    meta: {
-                        sidebar: "chat",
-                    },
+                    children: [
+                        {
+                            path: ":id",
+                            component: () =>
+                                import(
+                                    "../components/Admin/Chat/ChatComponent.vue"
+                                ),
+                            name: "admin.chat.id",
+                            meta: {
+                                sidebar: "chat",
+                                status: "active",
+                                transition: 'chat'
+                            },
+                        },
+                    ]
                 },
                 {
                     path: "students",
