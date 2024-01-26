@@ -12,20 +12,25 @@ import axios from "axios";
 import { useAuthStore } from "./stores/authStore";
 import { onMounted } from "vue";
 import TheHeader from "./components/TheHeader.vue";
+import router from "./router";
 const authStore = useAuthStore();
 
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const loading = document.getElementById('loading');
-        document.getElementById('app')!.style.opacity = '1';
-        document.body.style.overflow = 'auto';
-        loading!.style.opacity = '0';
+window.addEventListener(
+    "load",
+    () => {
         setTimeout(() => {
-            loading!.style.display = 'none';
-            loading!.remove();
-        }, 300);
-    }, 200);
-}, { once: true });
+            const loading = document.getElementById("loading");
+            document.getElementById("app")!.style.opacity = "1";
+            document.body.style.overflow = "auto";
+            loading!.style.opacity = "0";
+            setTimeout(() => {
+                loading!.style.display = "none";
+                loading!.remove();
+            }, 300);
+        }, 200);
+    },
+    { once: true }
+);
 
 onMounted(async () => {
     await axios.get("/api").then((res) => {
@@ -38,6 +43,8 @@ onMounted(async () => {
                 isAdmin: false,
             };
             localStorage.removeItem("user");
+            router.push("/");
+            return;
         }
         // авторизован, но без localStorage
         if (!localStorage.getItem("user") && res.data !== false) {
@@ -64,16 +71,55 @@ onMounted(async () => {
     background-color: $bg-dark;
 }
 
+.tiptap {
+    blockquote {
+        border-left: 2px solid $muted;
+        padding-left: 1rem;
+    }
+
+    hr {
+        border: none;
+        border-top: 2px solid $muted;
+        margin: 2rem 0;
+    }
+}
+
 @font-face {
     font-family: "Arizonia";
-    src: url('./assets/fonts/Arizonia-Regular.ttf');
+    src: url("./assets/fonts/Arizonia-Regular.ttf");
     font-weight: 400;
 }
 
 @font-face {
     font-family: "IBM Plex Sans";
-    src: url('./assets/fonts/IBMPlexSans-Regular.ttf');
+    src: url("./assets/fonts/IBMPlexSans-Regular.ttf");
     font-weight: 400;
+}
+
+// scrollbar
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    background-color: #242424f6;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 12px;
+    margin-right: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #efe4e4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #d3c9c9;
+    border: 1px solid #333333;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+    border: 1px solid #333333;
 }
 
 //route animations
@@ -96,42 +142,42 @@ onMounted(async () => {
     transform: translateY(30px);
 }
 
+.test-enter-from {
+    // transform: none;
+}
+
+.test-leave-to {
+    // transform: none;
+}
+
 //opacity
 
-.opacity-enter-from {
-    opacity: 0;
-}
+// .opacity-enter-from {
+//     opacity: 0;
+// }
 
-.opacity-enter-active {
-    transition: all 0.2s ease-in;
-}
+// .opacity-enter-active {
+//     transition: all 0.2s ease-in;
+// }
 
-.opacity-leave-active {
-    transition: all 0.3s ease-in-out;
-}
+// .opacity-leave-active {
+//     transition: all 0.3s ease-in-out;
+// }
 
-.opacity-leave-to {
-    opacity: 0;
-}
+// .opacity-leave-to {
+//     opacity: 0;
+// }
 
 // errors
 
-.errors-enter-from {
-    opacity: 0;
-    transform: scale(1.5);
-}
-
-.errors-enter-active {
-    transition: all 0.2s ease-in;
-}
-
+.errors-enter-active,
 .errors-leave-active {
-    transition: all 0.3s ease-in-out;
+    transition: opacity 0.2s ease;
 }
 
+.errors-enter-from,
 .errors-leave-to {
     opacity: 0;
-    transform: scale(0);
 }
 
 .--fade {

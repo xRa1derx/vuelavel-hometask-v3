@@ -58,10 +58,11 @@ function sendEmailOpen() {
 </script>
 <style scoped lang="scss">
 @import '../sass/variables';
+
 .wrapper {
     main {
         .greetings-page {
-            padding: 1rem;
+            padding: 0.5rem;
             max-width: 1000px;
             margin: auto;
 
@@ -193,6 +194,7 @@ function sendEmailOpen() {
                 grid-template-columns: repeat(2, 1fr);
                 margin-bottom: 10rem;
                 margin-top: 5rem;
+                padding: 1rem;
 
                 .greetings-page__about {
                     grid-row: 1;
@@ -323,6 +325,7 @@ function sendEmailOpen() {
     .wrapper {
         main {
             .greetings-page {
+
                 .greetings-page__about {
                     .greetings-page__first-word {
                         font-size: 38px;

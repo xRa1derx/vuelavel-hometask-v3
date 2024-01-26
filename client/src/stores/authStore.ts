@@ -29,17 +29,18 @@ export const useAuthStore = defineStore('authStore', () => {
     const login = async (email: string, password: string) => {
         await axios.get("/sanctum/csrf-cookie").then(() => {
             const result = axios.post("/login", { email, password }).then(({ data }) => {
-                console.log(data);
-
                 user.value.id = data.id;
                 user.value.username = data.name;
                 user.value.isAuth = true;
                 data.is_admin ? user.value.isAdmin = true : user.value.isAdmin = false;
-
                 router.push({ name: data.is_admin ? 'admin' : 'dashboard' });
             });
             return result;
         });
+    };
+
+    const getAuthUser = () => {
+        return user.value;
     };
 
     watch(() => user, (state) => {
@@ -48,5 +49,5 @@ export const useAuthStore = defineStore('authStore', () => {
         }
     }, { deep: true });
 
-    return { login, user };
+    return { login, user, getAuthUser };
 });

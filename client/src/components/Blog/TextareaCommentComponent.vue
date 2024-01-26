@@ -1,10 +1,10 @@
 <template>
     <div class="textarea">
         <div class="textarea-wrap">
-            <div v-if="authStore.user.isAuth === true" class="textarea__username">
-                {{ authStore.user.username }}:
+            <div v-if="authStore.getAuthUser().isAuth" class="textarea__username" data-test="user-logged-in">
+                {{ authStore.getAuthUser().username }}:
             </div>
-            <div v-else class="textarea__username">
+            <div v-else class="textarea__username" data-test="user-not-logged-in">
                 <button class="textarea__username-button">Guest</button>
             </div>
             <textarea class="textarea__body" ref="commentTextarea">

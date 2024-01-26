@@ -37,7 +37,7 @@
     </BaseModal>
 </template>
 <script setup lang="ts">
-import BaseModal from "./BaseModal.vue";
+import BaseModal from "./UI/BaseModal.vue";
 import axios from "axios";
 import { ref } from "vue";
 

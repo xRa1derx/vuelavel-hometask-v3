@@ -88,9 +88,9 @@ class Post extends Model
 
         $fileName = md5(Carbon::now() . '_' . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
         $prev_name = 'prev_' . $fileName;
-        $image->storeAs('images/posts/', $fileName);
-        $path = public_path('images/posts/' . $prev_name);
-        $filePath = 'images/posts/' . $fileName;
+        $image->storeAs('assets/images/posts/', $fileName);
+        $path = public_path('assets/images/posts/' . $prev_name);
+        $filePath = 'assets/images/posts/' . $fileName;
         PostImage::create([
             'name' => $fileName,
             'preview' => $prev_name,

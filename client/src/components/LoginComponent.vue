@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseModal from '../components/BaseModal.vue';
+import BaseModal from '../components/UI/BaseModal.vue';
 import { ref } from "vue";
 import { useAuthStore } from "../stores/authStore";
 
@@ -65,7 +65,7 @@ defineProps<Props>();
 
 <style scoped lang="scss">
 .login {
-    z-index: 1;
+    z-index: 2;
 }
 
 .login__body {
@@ -138,5 +138,4 @@ defineProps<Props>();
     }
 
 }
-
 </style>
