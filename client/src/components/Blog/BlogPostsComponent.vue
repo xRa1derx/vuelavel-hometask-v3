@@ -1,7 +1,6 @@
 <template>
     <template v-for="post in posts">
-        <BlogPostComponent :post="post"
-            ><template #edit="slotProps">
+        <BlogPostComponent :post="post"><template #edit="slotProps">
                 <slot name="edit" :postId="slotProps.postId"></slot>
             </template>
             <template #textarea>
@@ -28,7 +27,6 @@ const posts = ref<Post[]>();
 
 onMounted(() => {
     getPosts();
-    
 });
 
 function getPosts(page_url = "/api/posts") {
