@@ -99,7 +99,7 @@ onMounted(async () => {
 // scrollbar
 
 ::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.4rem;
     background-color: #242424f6;
 }
 
@@ -109,7 +109,8 @@ onMounted(async () => {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #efe4e4;
+    background-color: #eee;
+    border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -140,14 +141,6 @@ onMounted(async () => {
 .route-leave-to {
     opacity: 0;
     transform: translateY(30px);
-}
-
-.test-enter-from {
-    // transform: none;
-}
-
-.test-leave-to {
-    // transform: none;
 }
 
 //opacity

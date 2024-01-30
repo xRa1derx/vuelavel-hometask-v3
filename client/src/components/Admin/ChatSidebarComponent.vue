@@ -3,9 +3,6 @@
     </div>
 
     <section v-else class="chat-sidebar">
-        <button @click="$router.push({ name: 'admin' })" class="chat-sidebar__back-button">
-            <img class="back-button-icon" src="/assets/images/arrow-back.png" alt="">
-        </button>
         <div class="chat-sidebar__students" v-if="students">
             <div v-show="activeItem" id="marker" ref="marker"></div>
             <template v-for="student in students" :key="student.id">
@@ -21,6 +18,10 @@
             нет пользователей
         </div>
     </section>
+
+    <button @click="$router.push({ name: 'admin' })" class="chat-sidebar__back-button">
+        <img class="back-button-icon" src="/assets/images/arrow-back.svg" alt="">
+    </button>
 </template>
 
 <script setup lang="ts">
@@ -33,7 +34,7 @@ interface Students {
 
 const students = ref<Students>();
 const isLoading = ref(false);
-const activeItem = ref(null);
+const activeItem = ref<number | null>(null);
 const marker = ref();
 
 onMounted(() => getUsers());
@@ -45,7 +46,7 @@ function getUsers() {
         .finally(() => isLoading.value = false);
 }
 
-function selectStudent(event, id) {
+function selectStudent(event: any, id: number) {
     activeItem.value = id;
     marker.value.style.top = event.target.offsetTop + 'px';
     marker.value.style.height = event.target.offsetHeight + 'px';
@@ -73,22 +74,23 @@ function selectStudent(event, id) {
 }
 
 .chat-sidebar {
-    margin-bottom: 1rem;
-
-    .chat-sidebar__back-button {
-        width: 50px;
-        height: 50px;
-        background-color: inherit;
-        border: none;
-        margin: auto;
-    }
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    height: 100%;
+    overflow: auto;
+    transform: scaleX(-1); //Reflects the parent horizontally
 
     .chat-sidebar__students {
         position: relative;
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin-top: 2rem;
+        margin-top: 1rem;
+        transform: scaleX(-1); //Flips the child back to normal
+
+        a:hover {
+            color: $accent-primary;
+        }
 
         #marker {
             position: absolute;
@@ -100,7 +102,9 @@ function selectStudent(event, id) {
         }
 
         #marker::after,
-        #marker::before {
+        #marker::before,
+        .active::after,
+        .active::before {
             --border-radius: 1rem;
             content: '';
             position: absolute;
@@ -111,16 +115,23 @@ function selectStudent(event, id) {
             border-radius: 100vw;
         }
 
-        #marker::after {
+        #marker::after,
+        .active::after {
             top: calc(var(--border-radius) * -1);
             border-radius: 0 0 100vw 0;
             box-shadow: 10px 10px 0 10px #eee;
         }
 
-        #marker::before {
+        #marker::before,
+        .active::before {
             bottom: calc(var(--border-radius) * -1);
             border-radius: 0 100vw 0 0;
             box-shadow: 10px -10px 0 10px #eee;
+        }
+
+        .router-link-active {
+            color: black;
+            transition: all 1s ease;
         }
     }
 
@@ -128,6 +139,7 @@ function selectStudent(event, id) {
         position: relative;
         padding: 0.4rem 0.5rem 0.4rem 1rem;
         display: block;
+        color: #fff;
     }
 
     .active {
@@ -140,10 +152,41 @@ function selectStudent(event, id) {
     flex-direction: column;
 }
 
-@media (min-width: 601px) {
-    .chat-sidebar__students {
-        max-width: 15rem;
-        font-size: 1.4rem;
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eee;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $bg-dark;
+    border-radius: 20px;
+    border: 1px solid #eee;
+}
+
+.chat-sidebar__back-button {
+    width: 50px;
+    height: 50px;
+    background-color: inherit;
+    border: none;
+    margin: auto;
+
+    .back-button-icon {
+        margin: auto;
     }
+}
+
+@media (min-width: 601px) {
+    .chat-sidebar {
+        .chat-sidebar__students {
+            max-width: 15rem;
+            font-size: 1.4rem;
+            margin-top: 2rem;
+        }
+    }
+
 }
 </style>

@@ -1,62 +1,64 @@
 <template>
-    <div class="chat" ref="chatWrap">
+    <div class="chat" ref="chatBlock">
         <div class="chat__messages" v-for="(messages, date) in sortedChatByDate" :key="messages[0].id">
             <ChatMessageComponent :messages="messages" :date="date" :authStoreUserId="authStoreUserId"
                 @context-menu="contextMenu"></ChatMessageComponent>
         </div>
-        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu"></ChatContextMenu>
+        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive"
+            v-clickoutside="closeContextMenu">
+        </ChatContextMenu>
     </div>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+
 import { computed, onMounted, ref } from 'vue';
 import ChatMessageComponent from './ChatMessageComponent.vue';
 import ChatContextMenu from './ChatContextMenu.vue'
+import { vClickoutside } from "@/directives/clickoutside";
+import { useChatStore } from '@/stores/chatStore'
 
-interface Data {
-    chat: { message: String };
-}
-
-const chat = ref<Data>();
-const isContextMenu = ref(false);
+const chatStore = useChatStore();
+const isContextMenu = ref({ isActive: false, id: null });
 const clientX = ref(0);
 const clientY = ref(0);
-const chatWrap = ref();
+const chatBlock = ref();
 
-onMounted(() => getChat());
+onMounted(() => chatStore.getChat(props.routeId, props.authStoreUserId));
 
-function getChat() {
-    axios.get(`/api/chat/${props.routeId || props.authStoreUserId}`).then(res => {
-        console.log(res.data);
-        chat.value = res.data;
-    });
+function contextMenu(event: any, id) {
+    if (isContextMenu.value.isActive === false) {
+        setPositionToContextMenu(event);
+        isContextMenu.value.isActive = !isContextMenu.value.isActive;
+    } else {
+        setPositionToContextMenu(event);
+    }
+    isContextMenu.value.id = id;
 }
 
-function contextMenu(event: any) {
-    isContextMenu.value = !isContextMenu.value;
-    setPositionToContextMenu(event);
-
+function closeContextMenu() {
+    if (isContextMenu.value.isActive) {
+        isContextMenu.value.isActive = !isContextMenu.value.isActive;
+    }
 }
 
 function setPositionToContextMenu(event: any) {
     let halfScreenX = document.documentElement.clientWidth / 2;
     let halfScreenY = document.documentElement.clientHeight / 2;
 
-    // считаем правую часть от чата с паддингами
-    let rightSide = window.innerWidth - chatWrap.value.clientWidth - chatWrap.value.offsetLeft - 24;
+    const sidebarWidth = document.querySelector('.admin-page__sidebar')!.clientWidth;
+    let leftRightMargins = window.innerWidth - (chatBlock.value.clientWidth + sidebarWidth);
 
     if (halfScreenX < event.pageX) {
-        clientX.value = Math.floor(event.clientX - chatWrap.value.offsetLeft - rightSide / 2) - 130;
+        clientX.value = Math.floor(event.clientX - (leftRightMargins / 2 + sidebarWidth) - 130);
     } else {
-        clientX.value = Math.floor(event.clientX - chatWrap.value.offsetLeft - rightSide / 2) + 20;
+        clientX.value = Math.floor(event.clientX - (leftRightMargins / 2 + sidebarWidth) + 10);
     }
 
     if (halfScreenY < event.clientY) {
-        clientY.value = event.clientY + chatWrap.value.scrollTop - 280;
-
+        clientY.value = event.clientY + chatBlock.value.scrollTop - 280;
     } else {
-        clientY.value = event.clientY + chatWrap.value.scrollTop - 120;
+        clientY.value = event.clientY + chatBlock.value.scrollTop - 120;
     }
 };
 
@@ -68,7 +70,7 @@ function getFullDate(msg: any) {
 };
 
 const sortedChatByDate = computed(() => {
-    const res = chat.value?.reduce((acc, message) => {
+    const res = chatStore.getChatData()?.reduce((acc, message) => {
         const dayMonthYear = getFullDate(message)
             .toLocaleString()
             .slice(0, 10);
@@ -81,9 +83,8 @@ const sortedChatByDate = computed(() => {
 
 const props = defineProps({
     routeId: { type: Number, required: true },
-    authStoreUserId: { type: Number, required: true }
+    authStoreUserId: { type: Number, required: true },
 });
-
 
 </script>
 
@@ -96,12 +97,17 @@ const props = defineProps({
     display: flex;
     flex: 1 0 auto;
     flex-direction: column-reverse;
+    justify-content: start;
     /* flex-flow: column-reverse; */
     gap: 20px;
     overflow: auto;
     overflow-x: hidden;
     background-color: #eee;
     border-radius: 10px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+
+    .chat__messages {
+        overflow-y: auto;
+    }
+
 }
 </style>

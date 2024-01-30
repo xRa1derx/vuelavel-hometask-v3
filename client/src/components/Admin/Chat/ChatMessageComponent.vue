@@ -1,15 +1,11 @@
 <template>
     <div class="chat__message-day">{{ date }}</div>
     <div class="chat__message-container">
-
         <template v-for="message in messages" :key="message.id">
-            <div @click="contextMenu($event)" class="chat__message" :class="[
+            <div @click.stop="contextMenu($event, message.id)" class="chat__message" :class="[
                 authStoreUserId === message.sender.id
                     ? 'sender'
-                    : 'receiver',
-                // {
-                //     replying: quote.uuid === message.uuid,
-                // },
+                    : 'receiver'
             ]">
                 <div class="chat-message-text">
                     {{ message.message }}
@@ -23,16 +19,26 @@
 
 const props = defineProps({ messages: { type: Object }, date: { type: String }, authStoreUserId: { type: Number, required: true } });
 
-function contextMenu(event) {
-    emit('contextMenu', event);
+function contextMenu(event: any, id: number) {
+    emit('contextMenu', event, id);
 }
+
+
 
 const emit = defineEmits(["contextMenu"]);
 </script>
    
 <style lang="scss" scoped>
+.chat__message-day {
+    text-align: center;
+    color: $muted;
+    padding: 5px;
+}
+
 .chat__message-container {
-    .chat__message-day {}
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 5px;
 
     .chat__message {
         position: relative;
@@ -40,15 +46,15 @@ const emit = defineEmits(["contextMenu"]);
         overflow-wrap: break-word;
         padding: 10px;
         border-radius: 10px;
-        min-width: 130px;
+        min-width: 30px;
         color: black;
         cursor: pointer;
         white-space: pre-wrap;
         transition: margin 0.2s linear;
         z-index: 0;
         box-shadow: 0px 0px 3px 0px $muted;
+        margin-bottom: 5px;
 
-        .chat-message-text {}
     }
 
     .sender {

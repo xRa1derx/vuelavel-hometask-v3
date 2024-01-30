@@ -18,13 +18,17 @@ const props = defineProps(['clientX', 'clientY']);
     position: absolute;
     display: flex;
     flex-direction: column;
-    width: 120px;
-    border: 1px solid $muted;
+    width: 126px;
+    box-shadow: 0px 0px 3px 0px $muted;
+
+    button {
+        background-color: #fff;
+    }
 
     .chat-context-menu-btn {
         border: none;
         text-align: left;
-        padding: 10px 5px;
+        padding: 10px;
         cursor: pointer;
     }
 

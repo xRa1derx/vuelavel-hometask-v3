@@ -1,8 +1,8 @@
 <template>
     <div class="textarea-wrapper">
         <textarea @keyup.ctrl.enter="addMessage($event)" @keydown.tab.exact.prevent="tabLeft($event)" v-model="text"
-            class="chat-textarea"></textarea>
-        <button @click="addMessage">Отправить</button>
+            class="textarea__chat"></textarea>
+        <button class="textarea__chat-send-btn" @click="addMessage">Отправить</button>
     </div>
 </template>
 
@@ -10,10 +10,14 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { v4 as uuidv4 } from "uuid";
+import { useAuthStore } from '@/stores/authStore';
+import { useChatStore } from '@/stores/chatStore';
 
 const text = ref('');
+const authStore = useAuthStore();
+const chatStore = useChatStore();
 
-function addMessage(event) {
+function addMessage(event: any) {
     if (text.value.trim() !== ""
         //  || selectedFile.value != null
     ) {
@@ -22,15 +26,32 @@ function addMessage(event) {
                 "Content-Type": "multipart/form-data",
             };
             const uuid = uuidv4();
-            // const replyMessage = props.quote.message || "";
+            const replyMessage = "";
             const message = text.value;
             const formData = new FormData();
             formData.append("uuid", uuid);
             formData.append("to", props.routeId || 1);
             formData.append("from", props.authStoreUserId);
+            formData.append("replyMessage", replyMessage);
             formData.append("message", message);
-            // formData.append("replyMessage", replyMessage);
             axios.post(`/api/chat`, formData).then(res => console.log(res));
+            const data = {
+                uuid,
+                message: message || null,
+                replyMessage,
+                created_at: new Date().toISOString(),
+                new: 1,
+                created_at_for_humans: "sending",
+                sender: {
+                    id: authStore.user.id,
+                    name: authStore.user.username,
+                    admin: authStore.user.isAdmin ? 1 : 0,
+                },
+                files: [],
+                images: [],
+            };
+            chatStore.addMessage(data);
+            text.value = "";
         }
         else {
             let caret = event.target.selectionStart;
@@ -40,7 +61,7 @@ function addMessage(event) {
     }
 }
 
-function tabLeft(event) {
+function tabLeft(event: any) {
     let message = text.value;
     let originalSelectionStart = event.target.selectionStart,
         textStart = message.slice(0, originalSelectionStart),
@@ -63,9 +84,17 @@ const props = defineProps({
 .textarea-wrapper {
     width: 100%;
     display: flex;
+    gap: 5px;
 
-    .chat-textarea {
+    .textarea__chat {
         width: 100%;
+        resize: none;
+        border-radius: 5px;
+    }
+
+    .textarea__chat-send-btn {
+        border-radius: 5px;
+        border: none;
     }
 }
 </style>
