@@ -96,7 +96,7 @@ function slide() {
     });
 }
 
-function certificateSlider(index) {
+function certificateSlider(index: number) {
     currentImageIndex.value = index;
     certificateImage.value!.dataset.src = certificateImages.value[index].name;
     certificateImage.value!.src = certificateImages.value[index].name;

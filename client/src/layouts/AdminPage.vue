@@ -9,6 +9,9 @@
             <AdminSidebarComponent v-else> </AdminSidebarComponent>
         </div>
         <div class="admin-page__content">
+            <div class="admin-page__content-backdrop" @click="openSidebar"
+                v-if="adminStore.adminSidebar.isOpen && $route.meta.status == 'active'" ref="adminBackdrop">
+            </div>
             <router-view v-slot="slotProps">
                 <transition :name="$route.meta.transition">
                     <component :is="slotProps.Component" :key="$route.fullPath">
@@ -22,14 +25,17 @@
 <script setup lang="ts">
 import AdminSidebarComponent from "../components/Admin/AdminSidebarComponent.vue";
 import ChatSidebarComponent from "../components/Admin/ChatSidebarComponent.vue";
+import { useAdminStore } from '@/stores/adminStore';
 import { ref } from "vue";
 
+const adminStore = useAdminStore();
 const adminSidebar = ref<HTMLInputElement | null>(null);
-const adminSidebarIsOpen = ref(true);
+const adminBackdrop = ref<HTMLInputElement | null>(null);
 
 function openSidebar() {
-    adminSidebar.value!.classList.toggle("sidebar--open");
-    adminSidebarIsOpen.value = !adminSidebarIsOpen.value;
+    adminSidebar.value?.classList.toggle("sidebar--open");
+    adminBackdrop.value?.classList.toggle('hide');
+    adminStore.adminSidebar.isOpen = !adminStore.adminSidebar.isOpen;
 }
 
 </script>
@@ -50,22 +56,39 @@ function openSidebar() {
 
     .admin-page__sidebar {
         flex: 0 0 0%;
-        height: fit-content;
-        transition: all 0.5s ease;
+        transition: all 0.35s ease;
         overflow: hidden;
         opacity: 0;
         word-break: normal;
-        // margin-right: 0.4rem;
+        height: calc(100vh - 116px);
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
     }
 
     .admin-page__content {
+        position: relative;
         flex: auto;
         height: calc(100vh - 116px);
         overflow: hidden;
+
+        .admin-page__content-backdrop {
+            position: absolute;
+            width: 98%;
+            height: 99%;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            margin: auto;
+            background-color: rgb(0 0 0 / 66%);
+            border-radius: 10px 10px 5px 5px;
+        }
     }
 
     .sidebar--open {
-        flex: 0 0 100px;
+        flex: 0 0 170px;
         // margin-right: 0.5rem;
         opacity: 1;
         word-break: break-word;
@@ -90,12 +113,16 @@ function openSidebar() {
 
         .admin-page__content {
             height: calc(100vh - 104px);
+
+            .admin-page__content-backdrop {
+                display: none;
+            }
         }
 
         .admin-page__sidebar {
             flex: 0 0 auto;
-            // margin-right: 0.5rem;
             opacity: 1;
+            height: calc(100vh - 104px);
         }
     }
 }

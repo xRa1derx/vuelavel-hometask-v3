@@ -1,34 +1,15 @@
 <template>
     <div class="editor__header">
         <template v-for="(item, index) in items">
-            <div
-                class="divider"
-                v-if="item.type === 'divider'"
-                :key="`divider${index}`"
-            ></div>
+            <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`"></div>
             <menu-item v-else :key="index" v-bind="item" />
         </template>
-        <button
-            class="align-text-picker menu-item"
-            :class="{ 'is-active': typeAlignState != 'text' }"
-            @click.stop="togglePicker"
-            ref="picker"
-        >
-            <img
-                :src="`/assets/tip-tap-icons/align-${typeAlignState}.svg`"
-                alt=""
-                @click.stop
-            />
-            <div
-                v-clickoutside="togglePicker"
-                class="align-text-picker__container"
-                v-if="isPickerActive"
-            >
+        <button class="align-text-picker menu-item" :class="{ 'is-active': typeAlignState != 'text' }"
+            @click.stop="togglePicker" ref="picker">
+            <img :src="`/assets/tip-tap-icons/align-${typeAlignState}.svg`" alt="" @click.stop />
+            <div v-clickoutside="togglePicker" class="align-text-picker__container" v-if="isPickerActive">
                 <template v-for="(item, index) in textAlign" :key="item.id">
-                    <menu-item
-                        v-bind="item"
-                        @click="alignText(item.type)"
-                    ></menu-item>
+                    <menu-item v-bind="item" @click="alignText(item.type)"></menu-item>
                 </template>
             </div>
         </button>
@@ -185,6 +166,7 @@ const emit = defineEmits(["alighTextState"]);
     flex: 0 0 auto;
     flex-wrap: wrap;
     padding: 0.25rem;
+
     button {
         background: transparent;
         border: none;
@@ -209,11 +191,13 @@ const emit = defineEmits(["alighTextState"]);
             z-index: 1;
             border: 1px solid $muted;
         }
-        .align-text-picker__container > button {
+
+        .align-text-picker__container>button {
             width: 100%;
             height: 100%;
         }
-        .align-text-picker__container > button:hover {
+
+        .align-text-picker__container>button:hover {
             background-color: #303030;
         }
     }

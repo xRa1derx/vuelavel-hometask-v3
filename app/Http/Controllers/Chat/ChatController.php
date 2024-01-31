@@ -50,4 +50,15 @@ class ChatController extends Controller
 
         return ChatMessageResource::collection($sortedLastTenMessages->values()->all())->resolve();
     }
+
+    public function destroy($id)
+    {
+        $message = Message::findOrFail($id);
+        foreach ($message->files as $file) {
+            $message->deleteFile($file->id);
+            $file->delete();
+        }
+        $message->delete();
+        return $message->uuid;
+    }
 }
