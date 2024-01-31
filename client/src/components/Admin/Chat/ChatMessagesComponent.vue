@@ -1,12 +1,27 @@
 <template>
     <div class="chat" ref="chatBlock">
+        {{ isContextMenu.uuid }}
+        <div style="color: red;">{{ isContextMenu.isActive }}</div>
         <div class="chat__messages" v-for="(messages, date) in sortedChatByDate" :key="messages[0].id">
             <ChatMessageComponent :messages="messages" :date="date" :authStoreUserId="authStoreUserId"
                 @context-menu="contextMenu"></ChatMessageComponent>
         </div>
-        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive"
-            v-clickoutside="closeContextMenu">
+        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive" :isContextMenu="isContextMenu"
+            v-clickoutside="closeContextMenu" @close-context-menu="closeContextMenu" @modal="messageDeleteModal('delete')">
         </ChatContextMenu>
+        <transition name="opacity">
+            <BaseModal v-if="chatStore.getMessageAction().action" @closeModal="messageDeleteModal()">
+                <template #header>
+                    <p class="modal__text-delete">Вы действительно хотите удалить это сообщение?</p>
+                </template>
+                <template #body>
+                    <div class="modal__del-buttons">
+                        <button class="btn" @click="deleteMessage()">Да</button>
+                        <button class="btn" @click="messageDeleteModal()">Нет</button>
+                    </div>
+                </template>
+            </BaseModal>
+        </transition>
     </div>
 </template>
 
@@ -15,29 +30,42 @@
 import { computed, onMounted, ref } from 'vue';
 import ChatMessageComponent from './ChatMessageComponent.vue';
 import ChatContextMenu from './ChatContextMenu.vue'
+import BaseModal from '@/components/UI/BaseModal.vue';
 import { vClickoutside } from "@/directives/clickoutside";
 import { useChatStore } from '@/stores/chatStore'
+import axios from 'axios';
 
 const chatStore = useChatStore();
-const isContextMenu = ref({ isActive: false, id: null });
+const isContextMenu = ref({ isActive: false, uuid: null });
 const clientX = ref(0);
 const clientY = ref(0);
 const chatBlock = ref();
 
 onMounted(() => chatStore.getChat(props.routeId, props.authStoreUserId));
 
-function contextMenu(event: any, id) {
+function messageDeleteModal(action = null) {
+    chatStore.setMessageAction(isContextMenu.value.uuid, action);
+    closeContextMenu();
+}
+
+function deleteMessage(action = null) {
+    axios.delete(`/api/chat/${chatStore.getMessageAction().uuid}`).then(uuid => chatStore.deleteMessage(uuid.data));
+    chatStore.setMessageAction(isContextMenu.value.uuid, action);
+}
+
+function contextMenu(event: any, uuid) {
     if (isContextMenu.value.isActive === false) {
         setPositionToContextMenu(event);
         isContextMenu.value.isActive = !isContextMenu.value.isActive;
     } else {
         setPositionToContextMenu(event);
     }
-    isContextMenu.value.id = id;
+    isContextMenu.value.uuid = uuid;
 }
 
 function closeContextMenu() {
     if (isContextMenu.value.isActive) {
+        isContextMenu.value.uuid = null;
         isContextMenu.value.isActive = !isContextMenu.value.isActive;
     }
 }
@@ -89,6 +117,16 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+.modal__text-delete {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.modal__del-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
 .chat {
     width: 100%;
     margin: auto;

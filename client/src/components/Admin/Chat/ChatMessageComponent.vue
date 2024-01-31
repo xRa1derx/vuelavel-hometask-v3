@@ -2,7 +2,7 @@
     <div class="chat__message-day">{{ date }}</div>
     <div class="chat__message-container">
         <template v-for="message in messages" :key="message.id">
-            <div @click.stop="contextMenu($event, message.id)" class="chat__message" :class="[
+            <div @click.stop="contextMenu($event, message.uuid)" class="chat__message" :class="[
                 authStoreUserId === message.sender.id
                     ? 'sender'
                     : 'receiver'
@@ -19,11 +19,9 @@
 
 const props = defineProps({ messages: { type: Object }, date: { type: String }, authStoreUserId: { type: Number, required: true } });
 
-function contextMenu(event: any, id: number) {
-    emit('contextMenu', event, id);
+function contextMenu(event: any, uuid: string) {
+    emit('contextMenu', event, uuid);
 }
-
-
 
 const emit = defineEmits(["contextMenu"]);
 </script>

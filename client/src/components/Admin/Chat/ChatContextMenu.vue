@@ -3,13 +3,14 @@
         <button class="chat-context-menu-btn">Добавить файлы</button>
         <button class="chat-context-menu-btn">Ответить</button>
         <button class="chat-context-menu-btn">Редактировать</button>
-        <button class="chat-context-menu-btn">Удалить</button>
+        <button class="chat-context-menu-btn" @click="$emit('modal')">Удалить</button>
     </div>
 </template>
 
 <script setup lang="ts">
 
 const props = defineProps(['clientX', 'clientY']);
+const emit = defineEmits(['modal']);
 
 </script>
 
