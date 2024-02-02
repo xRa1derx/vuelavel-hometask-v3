@@ -1,42 +1,43 @@
 <template>
-    <div class="chat__message-day">{{ date }}</div>
-    <div class="chat__message-container">
-        <template v-for="message in messages" :key="message.id">
-            <div @click.stop="contextMenu($event, message.uuid)" class="chat__message" :class="[
-                authStoreUserId === message.sender.id
-                    ? 'sender'
-                    : 'receiver'
-            ]">
-                <div class="chat-message-text">
-                    {{ message.message }}
-                </div>
+    <div class="chat__message-content" ref="message" @click="addToDelete(props.message?.uuid)">
+        <div @click.stop="contextMenu($event, props.message?.uuid)" class="chat__message" :class="[
+            authStoreUserId === props.message?.sender.id
+                ? 'sender'
+                : 'receiver'
+        ]">
+            <div class="chat-message-text">
+                {{ props.message?.message }}
             </div>
-        </template>
+        </div>
     </div>
 </template>
    
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useChatStore } from '@/stores/chatStore';
 
-const props = defineProps({ messages: { type: Object }, date: { type: String }, authStoreUserId: { type: Number, required: true } });
+const message = ref();
+const chatStore = useChatStore();
+
+function addToDelete(uuid: string) {
+    chatStore.setMessageAction('massDelete', uuid);
+    message.value.classList.toggle('selected');
+}
 
 function contextMenu(event: any, uuid: string) {
     emit('contextMenu', event, uuid);
 }
 
-const emit = defineEmits(["contextMenu"]);
+const props = defineProps({ message: { type: Object }, authStoreUserId: { type: Number, required: true } });
+const emit = defineEmits(['contextMenu']);
+
 </script>
    
 <style lang="scss" scoped>
-.chat__message-day {
-    text-align: center;
-    color: $muted;
-    padding: 5px;
-}
-
-.chat__message-container {
+.chat__message-content {
     display: flex;
     flex-direction: column-reverse;
-    margin: 5px;
+    margin: 5px 0;
 
     .chat__message {
         position: relative;
@@ -51,8 +52,8 @@ const emit = defineEmits(["contextMenu"]);
         transition: margin 0.2s linear;
         z-index: 0;
         box-shadow: 0px 0px 3px 0px $muted;
-        margin-bottom: 5px;
 
+        // margin-bottom: 5px;
     }
 
     .sender {
@@ -60,11 +61,13 @@ const emit = defineEmits(["contextMenu"]);
         /* background-color: #ffa04f; */
         background-color: #fff;
         margin-left: 50px;
+        margin-right: 10px;
     }
 
     .receiver {
         align-self: flex-start;
         background-color: #ffe083;
+        margin-left: 10px;
     }
 
     .sender:hover {
@@ -75,6 +78,20 @@ const emit = defineEmits(["contextMenu"]);
     .receiver:hover {
         align-self: flex-start;
         background-color: #ffd965;
+    }
+}
+
+.chat__message-content:hover {
+    background-color: #d2d2d2;
+}
+
+.selected {
+    background-color: $muted !important;
+}
+
+@media (hover: none) {
+    .chat__message-content:hover {
+        background-color: inherit;
     }
 }
 </style>
