@@ -71,11 +71,12 @@ function openSidebar() {
         flex: auto;
         height: calc(100vh - 116px);
         overflow: hidden;
+        border-radius: 10px;
 
         .admin-page__content-backdrop {
             position: absolute;
-            width: 98%;
-            height: 99%;
+            width: 100%;
+            height: 100%;
             left: 0;
             top: 0;
             right: 0;
@@ -83,7 +84,8 @@ function openSidebar() {
             z-index: 1;
             margin: auto;
             background-color: rgb(0 0 0 / 66%);
-            border-radius: 10px 10px 5px 5px;
+            border: 3px #eee outset;
+            border-radius: 10px;
         }
     }
 

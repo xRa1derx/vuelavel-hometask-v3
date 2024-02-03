@@ -168,15 +168,23 @@ function selectStudent(event: any, id: number) {
 }
 
 .chat-sidebar__back-button {
-    width: 50px;
-    height: 50px;
-    background-color: inherit;
-    border: none;
+    width: 50%;
     margin: auto;
+    background-color: inherit;
+    border: 1px solid $bg-dark;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 0;
 
     .back-button-icon {
+        height: 40px;
         margin: auto;
+        padding: 5px 0;
     }
+}
+
+.chat-sidebar__back-button:hover {
+    border: 1px solid #eee;
 }
 
 @media (min-width: 601px) {
