@@ -11,7 +11,7 @@
                                 <div class="service__course-title" :class="`service__${oneCourseInfo['class']}-title`">
                                     <p>{{ oneCourseInfo['title'] }}</p>
                                 </div>
-                                <div class="closeModal" @click="showCourse()"></div>
+                                <div class="close-cross close-modal" @click="showCourse()"></div>
                             </template>
                             <template #body>
                                 <div :class="`service__${oneCourseInfo['class']}-description`" class="service__description">
@@ -121,6 +121,12 @@ function showCourse(course = {}) {
 </script>
 
 <style lang="scss" scoped>
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
 .service {
     color: #fff;
 

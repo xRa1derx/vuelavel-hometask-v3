@@ -137,7 +137,7 @@ function selectStudent(event: any, id: number) {
 
     .chat-sidebar__student {
         position: relative;
-        padding: 0.4rem 0.5rem 0.4rem 1rem;
+        padding: 0.4rem 1.5rem 0.4rem 1rem;
         display: block;
         color: #fff;
     }

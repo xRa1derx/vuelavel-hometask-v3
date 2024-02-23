@@ -4,17 +4,19 @@
             <ChatDayComponent :messages="messages" :date="date" :authStoreUserId="authStoreUserId"
                 @context-menu="contextMenu"></ChatDayComponent>
         </div>
-        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive" :isContextMenu="isContextMenu"
+        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive"
             v-clickoutside="closeContextMenu" @close-context-menu="closeContextMenu" @modal="messageDeleteModal()">
         </ChatContextMenu>
         <transition name="opacity">
             <BaseModal v-if="chatStore.getModalState()" @closeModal="chatStore.closeModal()">
                 <template #header>
-                    <p class="modal__text-delete">Вы действительно хотите удалить это сообщение?</p>
+                    <p class="modal__text-delete">Вы действительно хотите удалить {{
+                        chatStore.deleteActionsWithMessage.uuid.length
+                        > 1 ? 'эти сообщения' : 'это сообщение' }}?</p>
                 </template>
                 <template #body>
                     <div class="modal__del-buttons">
-                        <button class="btn" @click="chatStore.deleteMessage(isContextMenu.uuid as string)">Да</button>
+                        <button class="btn" @click="chatStore.deleteMessage()">Да</button>
                         <button class="btn" @click="chatStore.closeModal()">Нет</button>
                     </div>
                 </template>
@@ -47,12 +49,11 @@ onMounted(() => chatStore.getChat(props.routeId, props.authStoreUserId));
 
 function messageDeleteModal() {
     chatStore.openModal('delete', isContextMenu.value.uuid);
-    closeContextMenu();
 }
 
 function contextMenu(event: any, uuid: string) {
-    isContextMenu.value.uuid = null; // reset context-menu uuid BEFORE
-    chatStore.setMessageAction(isContextMenu.value.uuid); // reset mass delete uuid on click
+    // chatStore.setMessageAction();
+    // reset mass delete uuid on click
     if (isContextMenu.value.isActive === false) {
         setPositionToContextMenu(event);
         isContextMenu.value.isActive = !isContextMenu.value.isActive;
@@ -133,11 +134,12 @@ const props = defineProps({
     gap: 20px;
     overflow-x: hidden;
     background-color: #eee;
-    border-radius: 10px;
+    padding-bottom: 40px;
+}
 
-    // overflow-y: auto;
-    // width: 100%;
-    // margin: auto;
-    // overflow: auto;
+@media (min-width: 601px) {
+    .chat {
+        border-radius: 10px 10px 0 0;
+    }
 }
 </style>

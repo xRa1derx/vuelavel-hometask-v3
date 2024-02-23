@@ -6,35 +6,45 @@ import { useRoute } from 'vue-router';
 export const useChatStore = defineStore('chatStore', () => {
 
     interface Data {
-        chat: { message: String };
-        unshift: any;
-        filter: any;
-        reduce: any;
+        chat: { message: String },
+        unshift: any,
+        filter: any,
+        reduce: any,
     }
 
-    interface Action {
+    interface editAction {
         uuid: string[],
-        action: null | string
+        action: null | string,
+        initialText: null | string,
+    }
+
+    interface deleteAction {
+        uuid: string[],
+        action: null | string,
     }
 
     const chat = ref<Data>();
     const isModal = ref(false);
-    const actionWithMessage = ref<Action>({ uuid: [], action: null });
+    const message = ref({ text: '', uuid: '' });
+    const editActionsWithMessage = ref<editAction>({ uuid: [], action: null, initialText: null });
+    const deleteActionsWithMessage = ref<deleteAction>({ action: null, uuid: [] });
     const route = useRoute();
 
     const openModal = (action: string | null = null, uuid: string | null = null) => {
         isModal.value = true;
         if (action === 'delete') {
+            deleteActionsWithMessage.value.action = 'delete';
             setMessageAction(action, uuid);
         }
     }
 
     const closeModal = () => {
-        if (actionWithMessage.value.action === 'delete') {
+        if (deleteActionsWithMessage.value.action === 'delete') {
             setMessageAction();
         }
         isModal.value = false;
     }
+
     const getModalState = () => {
         return isModal.value;
     }
@@ -54,8 +64,23 @@ export const useChatStore = defineStore('chatStore', () => {
         resetSelectedMessages();
     }
 
+    const editMessage = (messageText: string) => {
+
+
+        chat.value?.filter((message: any) => {
+            if (message.uuid === editActionsWithMessage.value.uuid[0]) {
+                message.message = messageText;
+            }
+        });
+        resetSelectedMessages();
+        resetEditingMessage();
+        // if (quote.value && quote.value.uuid === messageId) {
+        //     quote.value = {};
+        // }
+    }
+
     const deleteMessage = () => {
-        getMessageAction().uuid.forEach(eUuid => {
+        deleteActionsWithMessage.value.uuid.forEach(eUuid => {
             axios.delete(`/api/chat/${eUuid}`).then(uuid => {
                 chat.value = chat.value?.filter(
                     (message: any) => message.uuid != uuid.data
@@ -66,24 +91,30 @@ export const useChatStore = defineStore('chatStore', () => {
         closeModal();
     }
 
-    const getMessageAction = () => {
-        return actionWithMessage.value;
-    }
+    const setMessage = (text: string, uuid: string) => {
+        message.value.text = text;
+        message.value.uuid = uuid;
+    };
 
     const setMessageAction = (action: null | string = null, uuid: string | null = null) => {
         if (uuid === null) {
             resetSelectedMessages();
         } else if (action === 'massDelete') {
-            if (!actionWithMessage.value.uuid.includes(uuid)) {
-                actionWithMessage.value.uuid.push(uuid);
+            deleteActionsWithMessage.value.action = 'massDelete';
+            if (!deleteActionsWithMessage.value.uuid.includes(uuid)) {
+                deleteActionsWithMessage.value.uuid.push(uuid);
             } else {
-                actionWithMessage.value.uuid.splice(actionWithMessage.value.uuid.indexOf(uuid), 1);
+                deleteActionsWithMessage.value.uuid.splice(deleteActionsWithMessage.value.uuid.indexOf(uuid), 1);
             }
-        } else {
-            actionWithMessage.value.uuid = [];
-            actionWithMessage.value.uuid.push(uuid);
+        } else if (action === 'delete') {
+            deleteActionsWithMessage.value.uuid = [];
+            deleteActionsWithMessage.value.uuid.push(uuid);
+        } else if (action === 'edit') {
+            editActionsWithMessage.value.uuid = [];
+            editActionsWithMessage.value.initialText = message.value.text;
+            editActionsWithMessage.value.uuid.push(uuid);
+            editActionsWithMessage.value.action = 'edit';
         }
-        actionWithMessage.value.action = action;
     }
 
     const resetSelectedMessages = () => {
@@ -93,31 +124,49 @@ export const useChatStore = defineStore('chatStore', () => {
                 e.classList.remove('selected')
             }
         })
-        actionWithMessage.value.action = null;
-        actionWithMessage.value.uuid = [];
+        deleteActionsWithMessage.value = { uuid: [], action: null };
     }
 
-    watch(() => actionWithMessage, () => {
-        if (actionWithMessage.value.uuid.length === 0) {
-            actionWithMessage.value.action = null;
+    const resetEditingMessage = () => {
+        editActionsWithMessage.value = { initialText: null, action: null, uuid: [] };
+    }
+
+    watch(() => deleteActionsWithMessage, () => {
+        if (deleteActionsWithMessage.value.uuid.length === 0 && deleteActionsWithMessage.value.action === 'massDelete') {
+            deleteActionsWithMessage.value.action = null;
         }
 
         const btn = document.querySelector<HTMLElement>('.textarea__chat-mass-del-btn');
         if (btn) {
-            if (actionWithMessage.value.action === 'massDelete') {
+            if (deleteActionsWithMessage.value.action === 'massDelete') {
                 btn!.style.width = '40px';
-                btn!.style.marginRight = '5px';
+                btn!.style.marginLeft = '5px';
             } else {
                 btn!.style.width = '0px';
-                btn!.style.marginRight = '0px';
+                btn!.style.marginLeft = '0px';
             }
         }
-    }, { deep: true })
+    }, { deep: true });
 
     watch(route, () => {
-        actionWithMessage.value.action = null;
-        actionWithMessage.value.uuid = [];
+        resetSelectedMessages();
+        resetEditingMessage();
     });
 
-    return { getChatData, getChat, addMessage, deleteMessage, setMessageAction, getMessageAction, getModalState, closeModal, openModal, actionWithMessage };
+    return {
+        getChatData,
+        getChat,
+        addMessage,
+        deleteMessage,
+        setMessageAction,
+        getModalState,
+        closeModal,
+        openModal,
+        setMessage,
+        editMessage,
+        resetEditingMessage,
+        message,
+        editActionsWithMessage,
+        deleteActionsWithMessage
+    };
 });

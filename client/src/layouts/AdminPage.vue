@@ -42,8 +42,6 @@ function openSidebar() {
 
 <style scoped lang="scss">
 .admin-page {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
     height: calc(100vh - 52px);
     position: relative;
 
@@ -71,7 +69,6 @@ function openSidebar() {
         flex: auto;
         height: calc(100vh - 116px);
         overflow: hidden;
-        border-radius: 10px;
 
         .admin-page__content-backdrop {
             position: absolute;
@@ -85,7 +82,6 @@ function openSidebar() {
             margin: auto;
             background-color: rgb(0 0 0 / 66%);
             border: 3px #eee outset;
-            border-radius: 10px;
         }
     }
 
@@ -106,6 +102,8 @@ function openSidebar() {
 
 @media (min-width: 601px) {
     .admin-page {
+        // padding-left: 0.5rem;
+        // padding-right: 0.5rem;
         height: calc(100vh - 72px);
         padding: 1rem;
 
