@@ -36,7 +36,7 @@
                 </div>
             </section>
             <AbouteMePage />
-            <ServicePage />
+            <!-- <ServicePage /> -->
         </main>
         <transition name="opacity">
             <SendMailComponent v-if="isEmailOpen" @closeModal="sendEmailOpen()" />

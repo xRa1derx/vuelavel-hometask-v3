@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Chat\ChatMessageRequest;
 use App\Http\Resources\ChatMessageResource;
 use App\Models\Message;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -49,6 +50,18 @@ class ChatController extends Controller
         $sortedLastTenMessages = $sender->merge($receiver)->sortBy('id')->reverse()->slice(0, 10);
 
         return ChatMessageResource::collection($sortedLastTenMessages->values()->all())->resolve();
+    }
+
+    public function update(Request $request, $id)
+    {
+        $message = Message::with('files')->findOrFail($id);
+        $countFiles = count($message->files);
+        $data = $this->validate($request, [
+            'message' => [$countFiles === 0 ? 'required' : 'nullable'],
+        ]);
+
+        $message->update($data);
+        return $id;
     }
 
     public function destroy($id)

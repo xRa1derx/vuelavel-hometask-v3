@@ -25,6 +25,7 @@ function addToDelete(uuid: string) {
 }
 
 function contextMenu(event: any, uuid: string) {
+    chatStore.setMessage(props.message!.message, props.message!.uuid);
     emit('contextMenu', event, uuid);
 }
 
@@ -71,7 +72,6 @@ const emit = defineEmits(['contextMenu']);
     }
 
     .sender:hover {
-        /* background-color: #ff9437; */
         background-color: rgb(223, 222, 222);
     }
 
@@ -81,7 +81,7 @@ const emit = defineEmits(['contextMenu']);
     }
 }
 
-.chat__message-content:hover {
+.chat__message-content:hover:not(:has(*:hover)) {
     background-color: #d2d2d2;
 }
 
@@ -90,7 +90,7 @@ const emit = defineEmits(['contextMenu']);
 }
 
 @media (hover: none) {
-    .chat__message-content:hover {
+    .chat__message-content:hover:not(:has(*:hover)) {
         background-color: inherit;
     }
 }

@@ -1,16 +1,25 @@
 <template>
-    <div class="chat__context-menu" :style="{ left: clientX + 'px', top: clientY + 'px' }">
+    <div @click="$emit('close-context-menu')" class="chat__context-menu"
+        :style="{ left: clientX + 'px', top: clientY + 'px' }">
         <button class="chat-context-menu-btn">Добавить файлы</button>
         <button class="chat-context-menu-btn">Ответить</button>
-        <button class="chat-context-menu-btn">Редактировать</button>
+        <button @click="editMessage()" class="chat-context-menu-btn">Редактировать</button>
         <button class="chat-context-menu-btn" @click="$emit('modal')">Удалить</button>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useChatStore } from '@/stores/chatStore';
+
+const chatStore = useChatStore();
+
+
+function editMessage() {
+    chatStore.setMessageAction('edit', chatStore.message.uuid);
+}
 
 const props = defineProps(['clientX', 'clientY']);
-const emit = defineEmits(['modal']);
+const emit = defineEmits(['modal', 'close-context-menu']);
 
 </script>
 
