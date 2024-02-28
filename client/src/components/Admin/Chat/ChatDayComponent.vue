@@ -1,5 +1,5 @@
 <template>
-    <div class="chat__message-day">{{ date }}</div>
+    <div class="chat__message-day">{{ props.date }}</div>
     <div class="chat__message-container">
         <template v-for="message in messages" :key="message.id">
             <ChatMessageComponent @contextMenu="contextMenu" :message="message" :authStoreUserId="authStoreUserId">

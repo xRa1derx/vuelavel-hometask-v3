@@ -169,7 +169,7 @@ function selectStudent(event: any, id: number) {
 
 .chat-sidebar__back-button {
     width: 50%;
-    margin: auto;
+    margin: 0 auto 1rem;
     background-color: inherit;
     border: 1px solid $bg-dark;
     border-radius: 10px;

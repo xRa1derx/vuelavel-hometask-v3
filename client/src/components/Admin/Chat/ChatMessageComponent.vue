@@ -1,44 +1,61 @@
 <template>
-    <div class="chat__message-content" ref="message" @click="addToDelete(props.message?.uuid)">
-        <div @click.stop="contextMenu($event, props.message?.uuid)" class="chat__message" :class="[
-            authStoreUserId === props.message?.sender.id
-                ? 'sender'
-                : 'receiver'
-        ]">
-            <div class="chat-message-text">
+    <div
+        class="chat__message-content"
+        ref="message"
+        @click="addToDelete(props.message?.uuid)"
+    >
+        <div
+            @click.stop="contextMenu($event, props.message?.uuid)"
+            class="chat__message"
+            :class="[
+                authStoreUserId === props.message?.sender.id
+                    ? 'sender'
+                    : 'receiver',
+            ]"
+        >
+            <p v-if="props.message?.replyMessage" class="chat__quote">{{ props.message?.replyMessage }}</p>
+            <p class="chat-message-text">
                 {{ props.message?.message }}
-            </div>
+            </p>
         </div>
     </div>
 </template>
-   
+
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useChatStore } from '@/stores/chatStore';
+import { ref } from "vue";
+import { useChatStore } from "@/stores/chatStore";
 
 const message = ref();
 const chatStore = useChatStore();
 
 function addToDelete(uuid: string) {
-    chatStore.setMessageAction('massDelete', uuid);
-    message.value.classList.toggle('selected');
+    chatStore.setMessageAction("massDelete", uuid);
+    message.value.classList.toggle("selected");
 }
 
 function contextMenu(event: any, uuid: string) {
     chatStore.setMessage(props.message!.message, props.message!.uuid);
-    emit('contextMenu', event, uuid);
+    emit("contextMenu", event, uuid);
 }
 
-const props = defineProps({ message: { type: Object }, authStoreUserId: { type: Number, required: true } });
-const emit = defineEmits(['contextMenu']);
-
+const props = defineProps({
+    message: { type: Object },
+    authStoreUserId: { type: Number, required: true },
+});
+const emit = defineEmits(["contextMenu"]);
 </script>
-   
+
 <style lang="scss" scoped>
 .chat__message-content {
     display: flex;
     flex-direction: column-reverse;
-    margin: 5px 0;
+    padding: 5px 0;
+    .chat__quote{
+        background-color: rgb(241, 241, 241);
+        padding: 10px;
+        border-radius: 10px;
+        border-left: 3px solid $accent-primary;
+    }
 
     .chat__message {
         position: relative;
@@ -61,7 +78,7 @@ const emit = defineEmits(['contextMenu']);
         align-self: flex-end;
         /* background-color: #ffa04f; */
         background-color: #fff;
-        margin-left: 50px;
+        margin-left: 80px;
         margin-right: 10px;
     }
 

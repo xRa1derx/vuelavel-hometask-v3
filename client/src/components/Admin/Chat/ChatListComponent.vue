@@ -1,23 +1,50 @@
 <template>
     <div class="chat" ref="chatBlock">
-        <div class="chat__messages" v-for="(messages, date) in sortedChatByDate" :key="messages[0].id">
-            <ChatDayComponent :messages="messages" :date="date" :authStoreUserId="authStoreUserId"
-                @context-menu="contextMenu"></ChatDayComponent>
+        <div
+            class="chat__messages"
+            v-for="(messages, date) in sortedChatByDate"
+            :key="messages[0].id"
+        >
+            <ChatDayComponent
+                :messages="messages"
+                :date="date"
+                :authStoreUserId="authStoreUserId"
+                @context-menu="contextMenu"
+            ></ChatDayComponent>
         </div>
-        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive"
-            v-clickoutside="closeContextMenu" @close-context-menu="closeContextMenu" @modal="messageDeleteModal()">
+        <ChatContextMenu
+            :clientX="clientX"
+            :clientY="clientY"
+            v-if="isContextMenu.isActive"
+            v-clickoutside="closeContextMenu"
+            @close-context-menu="closeContextMenu"
+        >
         </ChatContextMenu>
         <transition name="opacity">
-            <BaseModal v-if="chatStore.getModalState()" @closeModal="chatStore.closeModal()">
+            <BaseModal
+                v-if="chatStore.getModalState()"
+                @closeModal="chatStore.closeModal()"
+            >
                 <template #header>
-                    <p class="modal__text-delete">Вы действительно хотите удалить {{
-                        chatStore.deleteActionsWithMessage.uuid.length
-                        > 1 ? 'эти сообщения' : 'это сообщение' }}?</p>
+                    <p class="modal__text-delete">
+                        Вы действительно хотите удалить
+                        {{
+                            chatStore.massDeleteMessage.uuid?.length ==
+                                1 ||
+                            chatStore.singleDeleteMessage.action === "delete"
+                                ? "это сообщение"
+                                : "эти сообщения"
+                        }}?
+                    </p>
                 </template>
                 <template #body>
                     <div class="modal__del-buttons">
-                        <button class="btn" @click="chatStore.deleteMessage()">Да</button>
-                        <button class="btn" @click="chatStore.closeModal()">Нет</button>
+                        <button class="btn" @click="chatStore.deleteMessage()">
+                            Да
+                        </button>
+                        <button class="btn" @click="chatStore.closeModal()">
+                            Нет
+                        </button>
                     </div>
                 </template>
             </BaseModal>
@@ -26,18 +53,17 @@
 </template>
 
 <script setup lang="ts">
-
-import { computed, onMounted, ref } from 'vue';
-import ChatDayComponent from './ChatDayComponent.vue';
-import ChatContextMenu from './ChatContextMenu.vue'
-import BaseModal from '@/components/UI/BaseModal.vue';
+import { computed, onMounted, ref } from "vue";
+import ChatDayComponent from "./ChatDayComponent.vue";
+import ChatContextMenu from "./ChatContextMenu.vue";
+import BaseModal from "@/components/UI/BaseModal.vue";
 import { vClickoutside } from "@/directives/clickoutside";
-import { useChatStore } from '@/stores/chatStore'
+import { useChatStore } from "@/stores/chatStore";
 
 interface ContextMenu {
-    isActive: boolean,
-    uuid: null | string
-};
+    isActive: boolean;
+    uuid: null | string;
+}
 
 const chatStore = useChatStore();
 const isContextMenu = ref<ContextMenu>({ isActive: false, uuid: null });
@@ -47,13 +73,7 @@ const chatBlock = ref();
 
 onMounted(() => chatStore.getChat(props.routeId, props.authStoreUserId));
 
-function messageDeleteModal() {
-    chatStore.openModal('delete', isContextMenu.value.uuid);
-}
-
 function contextMenu(event: any, uuid: string) {
-    // chatStore.setMessageAction();
-    // reset mass delete uuid on click
     if (isContextMenu.value.isActive === false) {
         setPositionToContextMenu(event);
         isContextMenu.value.isActive = !isContextMenu.value.isActive;
@@ -72,13 +92,20 @@ function setPositionToContextMenu(event: any) {
     let halfScreenX = document.documentElement.clientWidth / 2;
     let halfScreenY = document.documentElement.clientHeight / 2;
 
-    const sidebarWidth = document.querySelector('.admin-page__sidebar')!.clientWidth;
-    let leftRightMargins = window.innerWidth - (chatBlock.value.clientWidth + sidebarWidth);
+    const sidebarWidth = document.querySelector(
+        ".admin-page__sidebar"
+    )!.clientWidth;
+    let leftRightMargins =
+        window.innerWidth - (chatBlock.value.clientWidth + sidebarWidth);
 
     if (halfScreenX < event.pageX) {
-        clientX.value = Math.floor(event.clientX - (leftRightMargins / 2 + sidebarWidth) - 130);
+        clientX.value = Math.floor(
+            event.clientX - (leftRightMargins / 2 + sidebarWidth) - 130
+        );
     } else {
-        clientX.value = Math.floor(event.clientX - (leftRightMargins / 2 + sidebarWidth) + 10);
+        clientX.value = Math.floor(
+            event.clientX - (leftRightMargins / 2 + sidebarWidth) + 10
+        );
     }
 
     if (halfScreenY < event.clientY) {
@@ -86,20 +113,18 @@ function setPositionToContextMenu(event: any) {
     } else {
         clientY.value = event.clientY + chatBlock.value.scrollTop - 120;
     }
-};
+}
 
 function getFullDate(msg: any) {
     let date = msg.created_at.slice(0, 16).replace("T", " ");
     let t = date.split(/[- :]/);
     let time = new Date(Date.UTC(t[0], t[1] - 1, t[2], t[3], t[4]));
     return time;
-};
+}
 
 const sortedChatByDate = computed(() => {
     const res = chatStore.getChatData()?.reduce((acc: any, message: object) => {
-        const dayMonthYear = getFullDate(message)
-            .toLocaleString()
-            .slice(0, 10);
+        const dayMonthYear = getFullDate(message).toLocaleString().slice(0, 10);
         acc[dayMonthYear] = acc[dayMonthYear] || [];
         acc[dayMonthYear].push(message);
         return acc;
@@ -111,7 +136,6 @@ const props = defineProps({
     routeId: { type: Number, required: true },
     authStoreUserId: { type: Number, required: true },
 });
-
 </script>
 
 <style lang="scss" scoped>

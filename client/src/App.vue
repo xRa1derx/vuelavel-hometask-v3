@@ -100,7 +100,7 @@ onMounted(async () => {
 
 ::-webkit-scrollbar {
     width: 0.4rem;
-    background-color: #242424f6;
+    background-color: #eee;
 }
 
 ::-webkit-scrollbar:horizontal {
@@ -109,7 +109,7 @@ onMounted(async () => {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #fff;
+    background-color: $muted;
 }
 
 ::-webkit-scrollbar-thumb:hover {
