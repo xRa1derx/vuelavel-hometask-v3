@@ -1,7 +1,11 @@
 <template>
     <section class="admin-page admin-page__container">
         <div class="admin-page__sidebar-open-btn" @click="openSidebar()">
-            <img class="admin-page__sidebar-image" src="/assets/images/sidebar-open.svg" alt="" />
+            <img
+                class="admin-page__sidebar-image"
+                src="/assets/images/sidebar-open.svg"
+                alt=""
+            />
         </div>
         <div class="admin-page__sidebar" ref="adminSidebar">
             <ChatSidebarComponent v-if="$route.meta.sidebar === 'chat'">
@@ -9,9 +13,17 @@
             <AdminSidebarComponent v-else> </AdminSidebarComponent>
         </div>
         <div class="admin-page__content">
-            <div class="admin-page__content-backdrop" @click="openSidebar"
-                v-if="adminStore.adminSidebar.isOpen && $route.meta.status == 'active'" ref="adminBackdrop">
-            </div>
+            <transition name="opacity">
+                <div
+                    class="admin-page__content-backdrop"
+                    @click="openSidebar"
+                    v-if="
+                        adminStore.adminSidebar.isOpen &&
+                        $route.meta.status == 'active'
+                    "
+                    ref="adminBackdrop"
+                ></div>
+            </transition>
             <router-view v-slot="slotProps">
                 <transition :name="$route.meta.transition">
                     <component :is="slotProps.Component" :key="$route.fullPath">
@@ -25,7 +37,7 @@
 <script setup lang="ts">
 import AdminSidebarComponent from "../components/Admin/AdminSidebarComponent.vue";
 import ChatSidebarComponent from "../components/Admin/ChatSidebarComponent.vue";
-import { useAdminStore } from '@/stores/adminStore';
+import { useAdminStore } from "@/stores/adminStore";
 import { ref } from "vue";
 
 const adminStore = useAdminStore();
@@ -34,10 +46,9 @@ const adminBackdrop = ref<HTMLInputElement | null>(null);
 
 function openSidebar() {
     adminSidebar.value?.classList.toggle("sidebar--open");
-    adminBackdrop.value?.classList.toggle('hide');
+    adminBackdrop.value?.classList.toggle("hide");
     adminStore.adminSidebar.isOpen = !adminStore.adminSidebar.isOpen;
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -50,6 +61,11 @@ function openSidebar() {
         position: absolute;
         left: 0.5rem;
         top: 0.8rem;
+        transition: transform 0.6s ease;
+    }
+
+    .admin-page__sidebar-open-btn:active{
+        transform: rotate(380deg);
     }
 
     .admin-page__sidebar {
@@ -58,7 +74,7 @@ function openSidebar() {
         overflow: hidden;
         opacity: 0;
         word-break: normal;
-        height: calc(100vh - 116px);
+        height: calc(100% - 52px);
         justify-content: space-between;
         display: flex;
         flex-direction: column;
@@ -67,7 +83,7 @@ function openSidebar() {
     .admin-page__content {
         position: relative;
         flex: auto;
-        height: calc(100vh - 116px);
+        height: calc(100% - 52px);
         overflow: hidden;
 
         .admin-page__content-backdrop {
@@ -80,8 +96,8 @@ function openSidebar() {
             bottom: 0;
             z-index: 1;
             margin: auto;
-            background-color: rgb(0 0 0 / 66%);
-            border: 3px #eee outset;
+            background-color: rgb(0 0 0 / 30%);
+            border: 3px #eee solid;
         }
     }
 

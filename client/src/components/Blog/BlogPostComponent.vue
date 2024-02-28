@@ -314,6 +314,9 @@ const props = defineProps({
 
             .tags-and-category {
                 .tags-body {
+                    display: flex;
+                    flex-wrap: wrap;
+                    row-gap: 5px;
                     .tags-body__title {
                         color: $muted;
                         margin-right: 1rem;
@@ -323,7 +326,7 @@ const props = defineProps({
                         background-color: #ffc107;
                         padding: 0 0.5rem;
                         color: black;
-                        margin-left: 0.5rem;
+                        margin-right: 0.5rem;
                     }
                 }
 

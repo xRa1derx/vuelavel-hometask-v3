@@ -1,26 +1,40 @@
 <template>
-    <div @click="$emit('close-context-menu')" class="chat__context-menu"
-        :style="{ left: clientX + 'px', top: clientY + 'px' }">
+    <div
+        @click="$emit('close-context-menu')"
+        class="chat__context-menu"
+        :style="{ left: clientX + 'px', top: clientY + 'px' }"
+    >
         <button class="chat-context-menu-btn">Добавить файлы</button>
-        <button class="chat-context-menu-btn">Ответить</button>
-        <button @click="editMessage()" class="chat-context-menu-btn">Редактировать</button>
-        <button class="chat-context-menu-btn" @click="$emit('modal')">Удалить</button>
+        <button @click="replyMessage()" class="chat-context-menu-btn">
+            Ответить
+        </button>
+        <button @click="editMessage()" class="chat-context-menu-btn">
+            Редактировать
+        </button>
+        <button
+            @click="chatStore.openModal('delete')"
+            class="chat-context-menu-btn"
+        >
+            Удалить
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useChatStore } from '@/stores/chatStore';
+import { useChatStore } from "@/stores/chatStore";
 
 const chatStore = useChatStore();
 
-
-function editMessage() {
-    chatStore.setMessageAction('edit', chatStore.message.uuid);
+function replyMessage() {
+    chatStore.setMessageAction("reply", chatStore.selectedMessage.uuid);
 }
 
-const props = defineProps(['clientX', 'clientY']);
-const emit = defineEmits(['modal', 'close-context-menu']);
+function editMessage() {
+    chatStore.setMessageAction("edit", chatStore.selectedMessage.uuid);
+}
 
+const props = defineProps(["clientX", "clientY"]);
+const emit = defineEmits(["close-context-menu"]);
 </script>
 
 <style lang="scss" scoped>
