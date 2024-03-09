@@ -1,39 +1,22 @@
 <template>
     <div class="chat" ref="chatBlock">
-        <div
-            class="chat__messages"
-            v-for="(messages, date) in sortedChatByDate"
-            :key="messages[0].id"
-        >
-            <ChatDayComponent
-                :messages="messages"
-                :date="date"
-                :authStoreUserId="authStoreUserId"
-                @context-menu="contextMenu"
-            ></ChatDayComponent>
+        <div class="chat__messages" v-for="(messages, date) in sortedChatByDate" :key="messages[0].id">
+            <ChatDayComponent :messages="messages" :date="date" @context-menu="contextMenu"></ChatDayComponent>
         </div>
-        <ChatContextMenu
-            :clientX="clientX"
-            :clientY="clientY"
-            v-if="isContextMenu.isActive"
-            v-clickoutside="closeContextMenu"
-            @close-context-menu="closeContextMenu"
-        >
+        <ChatContextMenu :clientX="clientX" :clientY="clientY" v-if="isContextMenu.isActive"
+            v-clickoutside="closeContextMenu" @close-context-menu="closeContextMenu">
         </ChatContextMenu>
         <transition name="opacity">
-            <BaseModal
-                v-if="chatStore.getModalState()"
-                @closeModal="chatStore.closeModal()"
-            >
+            <BaseModal v-if="chatStore.getModalState()" @closeModal="chatStore.closeModal()">
                 <template #header>
                     <p class="modal__text-delete">
                         Вы действительно хотите удалить
                         {{
                             chatStore.massDeleteMessage.uuid?.length ==
-                                1 ||
+                            1 ||
                             chatStore.singleDeleteMessage.action === "delete"
-                                ? "это сообщение"
-                                : "эти сообщения"
+                            ? "это сообщение"
+                            : "эти сообщения"
                         }}?
                     </p>
                 </template>
@@ -53,12 +36,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import ChatDayComponent from "./ChatDayComponent.vue";
 import ChatContextMenu from "./ChatContextMenu.vue";
 import BaseModal from "@/components/UI/BaseModal.vue";
 import { vClickoutside } from "@/directives/clickoutside";
 import { useChatStore } from "@/stores/chatStore";
+import { useAuthStore } from "@/stores/authStore";
 
 interface ContextMenu {
     isActive: boolean;
@@ -66,14 +50,17 @@ interface ContextMenu {
 }
 
 const chatStore = useChatStore();
+const authStore = useAuthStore();
 const isContextMenu = ref<ContextMenu>({ isActive: false, uuid: null });
 const clientX = ref(0);
 const clientY = ref(0);
 const chatBlock = ref();
 
-onMounted(() => chatStore.getChat(props.routeId, props.authStoreUserId));
+onMounted(() => chatStore.getChat(props.routeId, authStore.getAuthUser().id));
+onUnmounted(() => chatStore.chat = []);
 
 function contextMenu(event: any, uuid: string) {
+    emits('isContextMenu');
     if (isContextMenu.value.isActive === false) {
         setPositionToContextMenu(event);
         isContextMenu.value.isActive = !isContextMenu.value.isActive;
@@ -84,6 +71,7 @@ function contextMenu(event: any, uuid: string) {
 }
 
 function closeContextMenu() {
+    emits('isContextMenu');
     isContextMenu.value.uuid = null;
     isContextMenu.value.isActive = !isContextMenu.value.isActive;
 }
@@ -134,8 +122,9 @@ const sortedChatByDate = computed(() => {
 
 const props = defineProps({
     routeId: { type: Number, required: true },
-    authStoreUserId: { type: Number, required: true },
 });
+
+const emits = defineEmits(['isContextMenu']);
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,6 @@
 <template>
-    <div
-        @click="$emit('close-context-menu')"
-        class="chat__context-menu"
-        :style="{ left: clientX + 'px', top: clientY + 'px' }"
-    >
+    <div @click="$emit('close-context-menu')" class="chat__context-menu"
+        :style="{ left: clientX + 'px', top: clientY + 'px' }">
         <button class="chat-context-menu-btn">Добавить файлы</button>
         <button @click="replyMessage()" class="chat-context-menu-btn">
             Ответить
@@ -11,10 +8,7 @@
         <button @click="editMessage()" class="chat-context-menu-btn">
             Редактировать
         </button>
-        <button
-            @click="chatStore.openModal('delete')"
-            class="chat-context-menu-btn"
-        >
+        <button @click="chatStore.openModal('delete')" class="chat-context-menu-btn">
             Удалить
         </button>
     </div>
@@ -44,6 +38,7 @@ const emit = defineEmits(["close-context-menu"]);
     flex-direction: column;
     width: 126px;
     box-shadow: 0px 0px 3px 0px $muted;
+    z-index: 1;
 
     button {
         background-color: #fff;

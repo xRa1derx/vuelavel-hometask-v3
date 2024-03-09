@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkclient"]=self["webpackChunkclient"]||[]).push([[968],{1968:function(n,e,r){r.r(e),r.d(e,{default:function(){return l}});var t=r(3396);function u(n,e){return(0,t.wg)(),(0,t.iD)("div",null,"Dashdoard")}var c=r(89);const a={},i=(0,c.Z)(a,[["render",u]]);var l=i}}]);
-//# sourceMappingURL=968.641acac1.js.map

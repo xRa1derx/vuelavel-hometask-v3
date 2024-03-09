@@ -1,28 +1,17 @@
 <template>
     <section class="admin-page admin-page__container">
-        <div class="admin-page__sidebar-open-btn" @click="openSidebar()">
-            <img
-                class="admin-page__sidebar-image"
-                src="/assets/images/sidebar-open.svg"
-                alt=""
-            />
+        <div v-if="!adminStore.adminSidebar.isOpen" class="admin-page__sidebar-open-btn" @click="openSidebar()">
+            <img class="admin-page__sidebar-image" src="/assets/images/sidebar-open.svg" alt="" />
         </div>
-        <div class="admin-page__sidebar" ref="adminSidebar">
+        <div class="admin-page__sidebar sidebar--open" ref="adminSidebar">
             <ChatSidebarComponent v-if="$route.meta.sidebar === 'chat'">
             </ChatSidebarComponent>
             <AdminSidebarComponent v-else> </AdminSidebarComponent>
         </div>
         <div class="admin-page__content">
             <transition name="opacity">
-                <div
-                    class="admin-page__content-backdrop"
-                    @click="openSidebar"
-                    v-if="
-                        adminStore.adminSidebar.isOpen &&
-                        $route.meta.status == 'active'
-                    "
-                    ref="adminBackdrop"
-                ></div>
+                <div class="admin-page__content-backdrop" @click="openSidebar" v-if="adminStore.adminSidebar.isOpen
+                    " ref="adminBackdrop"></div>
             </transition>
             <router-view v-slot="slotProps">
                 <transition :name="$route.meta.transition">
@@ -38,7 +27,7 @@
 import AdminSidebarComponent from "../components/Admin/AdminSidebarComponent.vue";
 import ChatSidebarComponent from "../components/Admin/ChatSidebarComponent.vue";
 import { useAdminStore } from "@/stores/adminStore";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 
 const adminStore = useAdminStore();
 const adminSidebar = ref<HTMLInputElement | null>(null);
@@ -49,6 +38,12 @@ function openSidebar() {
     adminBackdrop.value?.classList.toggle("hide");
     adminStore.adminSidebar.isOpen = !adminStore.adminSidebar.isOpen;
 }
+
+onUnmounted(() => {
+    if (!adminStore.adminSidebar.isOpen) {
+        adminStore.adminSidebar.isOpen = true;
+    }
+})
 </script>
 
 <style scoped lang="scss">
@@ -59,52 +54,61 @@ function openSidebar() {
     .admin-page__sidebar-open-btn {
         width: 30px;
         position: absolute;
-        left: 0.5rem;
+        left: 1rem;
         top: 0.8rem;
         transition: transform 0.6s ease;
     }
 
-    .admin-page__sidebar-open-btn:active{
+    .admin-page__sidebar-open-btn:active {
         transform: rotate(380deg);
     }
 
     .admin-page__sidebar {
-        flex: 0 0 0%;
-        transition: all 0.35s ease;
-        overflow: hidden;
-        opacity: 0;
-        word-break: normal;
-        height: calc(100% - 52px);
-        justify-content: space-between;
+        width: 180px;
+        position: absolute;
+        height: calc(100% - 120px);
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        background-color: $bg-grey;
+        left: -300px;
+        top: 0;
+        transition: all 0.35s ease;
+        border-radius: 1rem;
+        // overflow: hidden;
+        // opacity: 0;
+        border-radius: 0 1rem 1rem 0;
+        word-break: normal;
+        z-index: 3;
+        margin-top: 58px;
     }
 
     .admin-page__content {
+        width: 100%;
         position: relative;
-        flex: auto;
+        // flex: auto;
         height: calc(100% - 52px);
         overflow: hidden;
 
         .admin-page__content-backdrop {
             position: absolute;
+            background-color: #eeeeeeb5;
             width: 100%;
             height: 100%;
             left: 0;
             top: 0;
             right: 0;
             bottom: 0;
-            z-index: 1;
+            z-index: 2;
             margin: auto;
-            background-color: rgb(0 0 0 / 30%);
-            border: 3px #eee solid;
         }
     }
 
     .sidebar--open {
-        flex: 0 0 170px;
+        // flex: 0 0 170px;
         // margin-right: 0.5rem;
-        opacity: 1;
+        // opacity: 1;
+        left: 0;
         word-break: break-word;
     }
 }
@@ -118,10 +122,8 @@ function openSidebar() {
 
 @media (min-width: 601px) {
     .admin-page {
-        // padding-left: 0.5rem;
-        // padding-right: 0.5rem;
         height: calc(100vh - 72px);
-        padding: 1rem;
+        padding: 1rem 0.2rem;
 
         .admin-page__sidebar-open-btn {
             display: none;
@@ -136,8 +138,13 @@ function openSidebar() {
         }
 
         .admin-page__sidebar {
-            flex: 0 0 auto;
-            opacity: 1;
+            position: relative;
+            width: 351px;
+            // flex: 0 0 auto;
+            margin-top: 0;
+            // opacity: 1;
+            border-radius: 1rem;
+            left: 0;
             height: calc(100vh - 104px);
         }
     }

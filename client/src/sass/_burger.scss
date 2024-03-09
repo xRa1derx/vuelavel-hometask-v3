@@ -9,11 +9,12 @@
 
 .burger {
     display: block;
-    position: relative;
+    position: absolute;
+    right: 1rem;
     width: 30px;
     height: 20px;
     align-self: center;
-    z-index: 2;
+    z-index: 4;
     & span {
         @include burgerStick();
         top: 9px;

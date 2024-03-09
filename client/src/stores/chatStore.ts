@@ -74,6 +74,7 @@ export const useChatStore = defineStore("chatStore", () => {
             });
     };
 
+
     const getChatData = () => {
         return chat.value;
     };
@@ -205,10 +206,10 @@ export const useChatStore = defineStore("chatStore", () => {
             if (btn) {
                 if (massDeleteMessage.value.action === "massDelete") {
                     btn!.style.width = "60px";
-                    btn!.style.marginLeft = "5px";
+                    // btn!.style.marginLeft = "5px";
                 } else {
                     btn!.style.width = "0px";
-                    btn!.style.marginLeft = "0px";
+                    // btn!.style.marginLeft = "0px";
                 }
             }
         },
@@ -233,6 +234,8 @@ export const useChatStore = defineStore("chatStore", () => {
         editMessage,
         resetEditingMessage,
         resetReplyMessage,
+        resetSelectedMessages,
+        chat,
         textarea,
         selectedMessage,
         replyActionsWithMessage,

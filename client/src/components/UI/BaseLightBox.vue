@@ -5,48 +5,19 @@
             <div class="lightbox" v-if="visible" @click="hide" ref="lightbox">
                 <div class="overlay"></div>
                 <div class="lightbox__items">
-                    <div
-                        class="lightbox__close-button"
-                        @click.stop="hide"
-                    ></div>
-                    <transition-group
-                        name="opacity"
-                        tag="div"
-                        class="lightbox__transition"
-                    >
-                        <div
-                            v-for="index in [indexLightBox]"
-                            v-bind:key="index"
-                            class="lightbox__image"
-                            @click.stop
-                        >
-                            <img
-                                v-lazyload
-                                :data-src="`/${images![indexLightBox].path}`"
-                                :src="`/${images![indexLightBox].path}`"
-                            />
+                    <div class="lightbox__close-button" @click.stop="hide"></div>
+                    <transition-group name="opacity" tag="div" class="lightbox__transition">
+                        <div v-for="index in [indexLightBox]" v-bind:key="index" class="lightbox__image" @click.stop>
+                            <img v-lazyload :data-src="`/${images![indexLightBox].path}`"
+                                :src="`/${images![indexLightBox].path}`" />
                         </div>
                     </transition-group>
                     <div class="lightbox__slider">
-                        <div
-                            @click.stop="prev"
-                            class="lightbox__slide-left"
-                            :class="{ hide: !hasPrev() }"
-                        >
-                            <img
-                                src="/assets/images/arrow-left-white.svg"
-                                alt=""
-                            />
+                        <div @click.stop="prev" class="lightbox__slide-left" :class="{ hide: !hasPrev() }">
+                            <img src="/assets/images/arrow-left-white.svg" alt="" />
                         </div>
-                        <div
-                            @click.stop="next"
-                            class="lightbox__slide-right"
-                            :class="{ hide: !hasNext() }"
-                        >
-                            <img
-                                src="/assets/images/arrow-right-white.svg"
-                                alt=""
-                            />
+                        <div @click.stop="next" class="lightbox__slide-right" :class="{ hide: !hasNext() }">
+                            <img src="/assets/images/arrow-right-white.svg" alt="" />
                         </div>
                     </div>
                 </div>
@@ -62,7 +33,10 @@ import debounce from "@/composables/debounce";
 import { useBodyOverflowHidden } from "@/composables/bodyOverflowHidden";
 
 const props = defineProps({
-    index: { type: Number, require: true },
+    index: {
+        type: Number
+        // , require: true 
+    },
     imagesLength: { type: Number, require: true },
     images: { type: Array, require: true },
 });
@@ -213,7 +187,7 @@ watch(
                 background-color: $bg-dark;
             }
 
-            & div > img {
+            & div>img {
                 width: 20px;
                 height: 32px;
                 margin-top: 1rem;

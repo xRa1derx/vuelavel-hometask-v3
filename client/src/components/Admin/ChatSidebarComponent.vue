@@ -74,6 +74,7 @@ function selectStudent(event: any, id: number) {
 }
 
 .chat-sidebar {
+    padding-right: 10px;
     margin-top: 2rem;
     margin-bottom: 2rem;
     height: 100%;
@@ -111,7 +112,7 @@ function selectStudent(event: any, id: number) {
             width: var(--border-radius);
             height: var(--border-radius);
             right: 0;
-            background-color: $bg-dark;
+            background-color: $bg-grey;
             border-radius: 100vw;
         }
 
@@ -119,14 +120,14 @@ function selectStudent(event: any, id: number) {
         .active::after {
             top: calc(var(--border-radius) * -1);
             border-radius: 0 0 100vw 0;
-            box-shadow: 10px 10px 0 10px #eee;
+            box-shadow: 11px 10px 0 10px #eee;
         }
 
         #marker::before,
         .active::before {
             bottom: calc(var(--border-radius) * -1);
             border-radius: 0 100vw 0 0;
-            box-shadow: 10px -10px 0 10px #eee;
+            box-shadow: 11px -10px 0 10px #eee;
         }
 
         .router-link-active {
@@ -171,7 +172,7 @@ function selectStudent(event: any, id: number) {
     width: 50%;
     margin: 0 auto 1rem;
     background-color: inherit;
-    border: 1px solid $bg-dark;
+    border: none;
     border-radius: 10px;
     cursor: pointer;
     padding: 0;

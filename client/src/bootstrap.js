@@ -21,5 +21,6 @@ window.axios.interceptors.response.use({}, err => {
         };
         router.push('/');
     }
+
     return Promise.reject(err);
 })

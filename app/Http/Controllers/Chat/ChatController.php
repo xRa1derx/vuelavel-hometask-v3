@@ -40,7 +40,7 @@ class ChatController extends Controller
         } else {
             $message = Message::create($data);
         }
-        return $message;
+        return ChatMessageResource::make($message)->resolve();
     }
 
     public function show($id)

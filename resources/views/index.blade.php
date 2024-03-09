@@ -1,4 +1,4 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body {
+<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,interactive-widget=resizes-content"><style>body {
       overflow-y: hidden;
     }
 
@@ -50,4 +50,4 @@
       100% {
         opacity: 1;
       }
-    }</style><title></title><script defer="defer" src="/js/chunk-vendors.2dd913d8.js"></script><script defer="defer" src="/js/app.990aebd7.js"></script><link href="/css/app.d028d7d4.css" rel="stylesheet"></head><body><div id="app"></div><div id="loading"><span class="dots">.</span><span class="dots">.</span><span class="dots">.</span></div></body></html>
+    }</style><title></title><script defer="defer" src="/js/chunk-vendors.7c8a09f0.js"></script><script defer="defer" src="/js/app.65d381b7.js"></script><link href="/css/app.385fed91.css" rel="stylesheet"></head><body><div id="app"></div><div id="loading"><span class="dots">.</span><span class="dots">.</span><span class="dots">.</span></div></body></html>
