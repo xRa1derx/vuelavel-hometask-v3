@@ -1,4 +1,5 @@
 <template>
+    <!-- <teleport to="body"> -->
     <div class="modal">
         <div class="overlay" @click="$emit('closeModal')"></div>
         <div class="modal__body" :style="cssStyle">
@@ -7,6 +8,7 @@
             <slot name="footer"></slot>
         </div>
     </div>
+    <!-- </teleport> -->
 </template>
 
 <script setup lang="ts">
@@ -35,7 +37,7 @@ defineProps<Props>();
     right: 0;
     bottom: 0;
     top: 0;
-    z-index: 1;
+    z-index: 4;
 
     .modal__body {
         position: relative;
@@ -44,7 +46,7 @@ defineProps<Props>();
         padding: 15px 35px;
         border-radius: 20px;
         font-size: 18px;
-        z-index: 2;
+        z-index: 4;
         margin: 0 1rem;
     }
 }

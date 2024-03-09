@@ -16,5 +16,29 @@
 .admin-sidebar {
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
+
+    a {
+        color: #fff;
+        padding: 0.4rem 1.5rem 0.4rem 1rem;
+    }
+
+    .router-link-active {
+        background-color: #fff;
+        color: #000;
+    }
+
+}
+
+@media (min-width: 601px) {
+    .admin-sidebar {
+        a {
+            font-size: 1.4rem;
+        }
+
+        a:hover {
+            color: $accent-primary;
+        }
+    }
 }
 </style>

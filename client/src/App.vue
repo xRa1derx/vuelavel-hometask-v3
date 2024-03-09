@@ -96,6 +96,7 @@ onMounted(async () => {
     font-weight: 400;
 }
 
+
 // scrollbar
 
 ::-webkit-scrollbar {

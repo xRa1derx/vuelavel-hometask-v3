@@ -12,32 +12,16 @@
             </div>
         </div>
         <div class="blog-post__body">
-            <div
-                @click="moreImages()"
-                class="blog-post__images-container"
-                :class="{ '--images-hidden': countImages(post.images.length) }"
-                ref="imagesContainer"
-            >
+            <div @click="moreImages()" class="blog-post__images-container"
+                :class="{ '--images-hidden': countImages(post.images.length) }" ref="imagesContainer">
                 <template v-for="(image, index) in post.images" :key="image.id">
-                    <BaseLightBox
-                        :index="index"
-                        :imagesLength="post.images.length"
-                        :images="post.images"
-                    >
+                    <BaseLightBox :index="index" :imagesLength="post.images.length" :images="post.images">
                         <template #image="{ show }">
-                            <div
-                                @click="show"
-                                class="blog-post__image-wrap"
-                                :class="{
+                            <div @click="show" class="blog-post__image-wrap" :class="{
                                 '--last-image': index === post.images.length! - 1 && post.images.length! % 2 != 0,
-                            }"
-                            >
-                                <img
-                                    class="blog-post__image"
-                                    v-lazyload
-                                    :data-src="`/assets/images/posts/${image.preview}`"
-                                    alt=""
-                                />
+                            }">
+                                <img class="blog-post__image" v-lazyload :data-src="`/assets/images/posts/${image.preview}`"
+                                    alt="" />
                             </div>
                         </template>
                     </BaseLightBox>
@@ -45,11 +29,7 @@
             </div>
             <div class="blog-post__content-container" ref="contentContainer">
                 <p class="blog-post__content-text" v-html="post.content"></p>
-                <button
-                    class="blog-post__content-button"
-                    @click="showMoreText()"
-                    ref="showMoreButton"
-                >
+                <button class="blog-post__content-button" @click="showMoreText()" ref="showMoreButton">
                     show more
                 </button>
             </div>
@@ -69,8 +49,7 @@
                         <div class="category-body__wrap">
                             <span class="category-body__title">Category: </span>
                             <span class="category-body__text">
-                                {{ post.category.title }}</span
-                            >
+                                {{ post.category.title }}</span>
                         </div>
                     </div>
                 </div>
@@ -78,11 +57,7 @@
                     <div class="comments__wrap">
                         <span class="comments__quantity">0</span>
                         <button class="comments__button">
-                            <img
-                                class="comments__button-image"
-                                src="/assets/images/comments.svg"
-                                alt=""
-                            />
+                            <img class="comments__button-image" src="/assets/images/comments.svg" alt="" />
                         </button>
                     </div>
                 </div>
@@ -242,14 +217,12 @@ const props = defineProps({
 
         .--images-hidden {
             overflow: hidden;
-            background-image: linear-gradient(
-                to bottom,
-                #24242400,
-                #24242418,
-                #24242444,
-                #242424b7,
-                #242424e3
-            );
+            background-image: linear-gradient(to bottom,
+                    #24242400,
+                    #24242418,
+                    #24242444,
+                    #242424b7,
+                    #242424e3);
             background-size: cover;
             position: relative;
             cursor: pointer;
@@ -317,6 +290,7 @@ const props = defineProps({
                     display: flex;
                     flex-wrap: wrap;
                     row-gap: 5px;
+
                     .tags-body__title {
                         color: $muted;
                         margin-right: 1rem;

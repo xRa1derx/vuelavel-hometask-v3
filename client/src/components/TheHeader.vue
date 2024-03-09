@@ -90,7 +90,7 @@ function logout() {
 .header {
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
 
     .logo {
         line-height: 18px;
@@ -139,7 +139,7 @@ function logout() {
     .header__login {
         align-self: center;
         position: absolute;
-        right: 0.5rem;
+        right: 1rem;
         top: 4rem;
         z-index: 1;
 
@@ -162,7 +162,7 @@ function logout() {
     .header__dashboard {
         align-self: center;
         position: absolute;
-        right: 0.5rem;
+        right: 1rem;
         top: 4rem;
         width: 30px;
         height: 30px;
@@ -204,7 +204,7 @@ function logout() {
             overflow: auto;
             background-color: $bg-grey;
             transition: all 0.3s ease 0s;
-            z-index: 2;
+            z-index: 4;
         }
 
         .active-menu {

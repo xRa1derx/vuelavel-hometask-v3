@@ -2,7 +2,7 @@
     <div class="chat__message-day">{{ props.date }}</div>
     <div class="chat__message-container">
         <template v-for="message in messages" :key="message.id">
-            <ChatMessageComponent @contextMenu="contextMenu" :message="message" :authStoreUserId="authStoreUserId">
+            <ChatMessageComponent @contextMenu="contextMenu" :message="message">
             </ChatMessageComponent>
         </template>
     </div>
@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import ChatMessageComponent from './ChatMessageComponent.vue';
 
-const props = defineProps({ messages: { type: Object }, date: { type: String }, authStoreUserId: { type: Number, required: true } });
+const props = defineProps({ messages: { type: Object }, date: { type: String } });
 
 function contextMenu(event: any, uuid: string) {
     emit('contextMenu', event, uuid);

@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkclient"]=self["webpackChunkclient"]||[]).push([[993],{8993:function(n,t,e){e.r(t),e.d(t,{default:function(){return l}});var u=e(3396);function r(n,t){return(0,u.wg)(),(0,u.iD)("div",null," Chat student component ")}var c=e(89);const i={},a=(0,c.Z)(i,[["render",r]]);var l=a}}]);
+//# sourceMappingURL=993.c195de08.js.map

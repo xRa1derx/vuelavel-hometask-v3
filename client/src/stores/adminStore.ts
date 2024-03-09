@@ -7,7 +7,7 @@ export type AdminState = {
 
 export const useAdminStore = defineStore('adminStore', () => {
     const adminSidebar = ref<AdminState>({
-        isOpen: false
+        isOpen: true
     });
 
     return { adminSidebar };

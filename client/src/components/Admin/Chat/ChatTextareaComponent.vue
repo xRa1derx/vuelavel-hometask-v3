@@ -1,48 +1,58 @@
 <template>
     <div class="textarea-wrapper">
-        <div class="textarea__chat-mass-del-btn" @click="chatStore.openModal()">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                shape-rendering="geometricPrecision"
-                text-rendering="geometricPrecision"
-                image-rendering="optimizeQuality"
-                viewBox="0 0 456 511.82"
-            >
+        <button @click.stop="isAttachMenu = true" class="textarea__chat-attach-btn">
+            <svg viewBox="0 0 448 512">
                 <path
-                    d="M48.42 140.13h361.99c17.36 0 29.82 9.78 28.08 28.17l-30.73 317.1c-1.23 13.36-8.99 26.42-25.3 26.42H76.34c-13.63-.73-23.74-9.75-25.09-24.14L20.79 168.99c-1.74-18.38 9.75-28.86 27.63-28.86zM24.49 38.15h136.47V28.1c0-15.94 10.2-28.1 27.02-28.1h81.28c17.3 0 27.65 11.77 27.65 28.01v10.14h138.66c.57 0 1.11.07 1.68.13 10.23.93 18.15 9.02 18.69 19.22.03.79.06 1.39.06 2.17v42.76c0 5.99-4.73 10.89-10.62 11.19-.54 0-1.09.03-1.63.03H11.22c-5.92 0-10.77-4.6-11.19-10.38 0-.72-.03-1.47-.03-2.23v-39.5c0-10.93 4.21-20.71 16.82-23.02 2.53-.45 5.09-.37 7.67-.37zm83.78 208.38c-.51-10.17 8.21-18.83 19.53-19.31 11.31-.49 20.94 7.4 21.45 17.57l8.7 160.62c.51 10.18-8.22 18.84-19.53 19.32-11.32.48-20.94-7.4-21.46-17.57l-8.69-160.63zm201.7-1.74c.51-10.17 10.14-18.06 21.45-17.57 11.32.48 20.04 9.14 19.53 19.31l-8.66 160.63c-.52 10.17-10.14 18.05-21.46 17.57-11.31-.48-20.04-9.14-19.53-19.32l8.67-160.62zm-102.94.87c0-10.23 9.23-18.53 20.58-18.53 11.34 0 20.58 8.3 20.58 18.53v160.63c0 10.23-9.24 18.53-20.58 18.53-11.35 0-20.58-8.3-20.58-18.53V245.66z"
-                ></path>
+                    d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z">
+                </path>
             </svg>
-            <p
-                v-if="chatStore.massDeleteMessage.action === 'massDelete'"
-                class="textarea__chat-mass-del-count"
-            >
-                <b>{{ chatStore.massDeleteMessage.uuid?.length }}</b>
-            </p>
+        </button>
+        <div class="textarea__attach-image-preview-container">
+            <div class="textarea__attach-image-preview" v-for="image in previewImages" :key="image.id">
+                <img class="textarea__attach-image" :src="image.image" />
+                <svg @click="removeImage(image.id)" class="textarea__attach-image-delete" viewBox="0 0 512 512" fill="white"
+                    stroke="black" stroke-width="5">
+                    <path
+                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z">
+                    </path>
+                </svg>
+            </div>
         </div>
-        <textarea
-            @keyup.ctrl.enter="addMessage($event)"
-            @keydown.tab.exact.prevent="tabLeft($event)"
-            v-model="chatStore.textarea"
-            class="textarea__chat"
-        ></textarea>
-        <button
-            v-if="chatStore.editActionsWithMessage.action === 'edit'"
-            class="textarea__chat-edit-btn"
-            :class="{ inputDisable: isInputDisabled === true }"
-            :disabled="isInputDisabled"
-            @click="updateMessage"
-        ></button>
-        <button
-            v-else
-            class="textarea__chat-send-btn"
-            @click="addMessage($event)"
-            :class="{ inputDisable: isInputDisabled === true }"
-            :disabled="isInputDisabled"
-        >
+        <div>
+            <input v-on:change="onChangeImageUpload" :key="fileInputKey" type="file" multiple style="display: none"
+                id="attach-image" accept="image/x-png,image/gif,image/jpeg" />
+        </div>
+        <textarea ref="chatTextarea" :placeholder="selectedImage.length ? 'Добавить описание...' : 'Написать сообщение...'"
+            @keyup.ctrl.enter="addMessage($event)" @keydown.tab.exact.prevent="tabLeft($event)" v-model="chatStore.textarea"
+            oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="textarea__chat"></textarea>
+        <button v-if="chatStore.editActionsWithMessage.action === 'edit'" class="textarea__chat-edit-btn"
+            :class="{ inputDisable: isInputDisabled === true }" :disabled="isInputDisabled" @click="updateMessage"></button>
+        <button v-else class="textarea__chat-send-btn" @click="addMessage($event)"
+            :class="{ inputDisable: isInputDisabled === true }" :disabled="isInputDisabled">
             Отправить
         </button>
+
+        <transition name="attach">
+            <div v-if="isAttachMenu" class="textarea__attach-menu" v-clickoutside="closeAttachMenu">
+                <button class="attach-image-btn" @click="attachImages()">
+                    <svg viewBox="0 0 512 512">
+                        <path
+                            d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z">
+                        </path>
+                    </svg>
+                    <p>Прикрепить картинку</p>
+                </button>
+                <button class="attach-file-btn" @click="attachFiles()">
+                    <svg viewBox="0 0 384 512">
+                        <path
+                            d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128z">
+                        </path>
+                    </svg>
+                    <p>Прикрепить файл</p>
+                </button>
+            </div>
+        </transition>
+
     </div>
 </template>
 
@@ -51,16 +61,66 @@ import axios from "axios";
 import { ref, watch } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import { useAuthStore } from "@/stores/authStore";
+import { useAdminStore } from "@/stores/adminStore";
 import { useChatStore } from "@/stores/chatStore";
+import { vClickoutside } from "@/directives/clickoutside";
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
+const adminStore = useAdminStore();
+const isAttachMenu = ref(false);
 const isInputDisabled = ref(true);
+const fileInputKey = ref(0);
+const chatTextarea = ref();
+const previewImages = ref([]);
+const selectedFile = ref(null);
+const selectedImage = ref([]);
+const onChangeImageUpload = (e: any) => {
+    selectedImage.value = [];
+    previewImages.value = [];
+    let fileList = e.target.files;
+    for (let i = 0; i < fileList.length; i++) {
+        let image = fileList[i];
+        if (!image.type.match("image.*")) {
+            return;
+        }
+        selectedImage.value.push({ image, id: i });
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            previewImages.value.push({ image: e.target.result, id: i });
+        };
+        reader.readAsDataURL(image);
+    }
+    selectedFile.value = null;
+};
+
+function closeAttachMenu() {
+    isAttachMenu.value = !isAttachMenu.value;
+}
+
+function attachImages() {
+    document.getElementById("attach-image")?.click();
+    console.log('картинка');
+}
+
+function removeImage(id: number) {
+    selectedImage.value = selectedImage.value.filter(
+        (image) => image.id != id
+    );
+    previewImages.value = previewImages.value.filter(
+        (image) => image.id != id
+    );
+}
+
+function attachFiles() {
+    console.log('файл');
+
+}
 
 function addMessage(event: any) {
     if (chatStore.editActionsWithMessage.action !== "edit") {
         if (
-            chatStore.textarea.trim() !== ""
+            chatStore.textarea.trim() !== "" || selectedImage.value.length
             //  || selectedFile.value != null
         ) {
             if (event.ctrlKey || event.type == "click") {
@@ -74,12 +134,22 @@ function addMessage(event: any) {
                 const formData = new FormData();
                 formData.append("uuid", uuid);
                 formData.append("to", props.routeId || 1);
-                formData.append("from", props.authStoreUserId);
+                formData.append("from", authStore.getAuthUser().id);
                 formData.append("replyMessage", replyMessage);
                 formData.append("message", message);
+                if (selectedImage.value.length) {
+                    for (let i = 0; i < selectedImage.value.length; i++) {
+                        let image = selectedImage.value[i].image;
+                        formData.append(`images[${i}]`, image);
+                    }
+                }
                 axios
                     .post(`/api/chat`, formData)
-                    .then((res) => console.log(res));
+                    .then((res) => {
+                        if (res.data.images.length) {
+                            addImages(res.data);
+                        }
+                    });
                 const data = {
                     uuid,
                     message: message || null,
@@ -96,7 +166,10 @@ function addMessage(event: any) {
                     images: [],
                 };
                 chatStore.addMessage(data);
+                selectedImage.value = [];
+                previewImages.value = [];
                 chatStore.textarea = "";
+                chatTextarea.value.style.height = "24px";
             } else {
                 let caret = event.target.selectionStart;
                 event.target.setRangeText("\n", caret, caret, "end");
@@ -107,6 +180,15 @@ function addMessage(event: any) {
         updateMessage();
     }
 }
+
+function addImages(images: any) {
+    const currentImage = chatStore.getChatData()?.filter(
+        (message: any) => message.uuid === images.uuid
+    );
+    currentImage[0].images = currentImage[0].images.concat(
+        images.images
+    );
+};
 
 function updateMessage() {
     if (chatStore.textarea.trim() !== "") {
@@ -142,49 +224,85 @@ watch(
 );
 
 watch(
-    () => chatStore.textarea,
+    () => [chatStore.textarea, selectedImage.value],
     () =>
-        chatStore.textarea.trim() == ""
+        chatStore.textarea.trim() == "" && !selectedImage.value.length
             ? (isInputDisabled.value = true)
             : (isInputDisabled.value = false)
 );
 
 const props = defineProps({
     routeId: { type: Number, required: true },
-    authStoreUserId: { type: Number, required: true },
 });
 </script>
 
 <style lang="scss" scoped>
 .textarea-wrapper {
     width: 100%;
+    min-height: 44px;
     position: relative;
     display: flex;
     background-color: #fff;
 
-    .textarea__chat-mass-del-btn {
-        width: 0px;
+    .textarea__attach-image-preview-container {
+        display: flex;
         position: absolute;
-        bottom: 90px;
+        width: 100%;
+        max-width: 598px;
         left: 0;
-        border-radius: 10px;
+        right: 0;
+        bottom: 55px;
+        height: fit-content;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin: auto;
+
+        .textarea__attach-image-preview {
+            position: relative;
+            flex-basis: 25%;
+            height: 15vh;
+            padding: 2px;
+            box-shadow: 0px 0px 3px 0px #b9b9b9;
+
+            .textarea__attach-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .textarea__attach-image-delete {
+                width: 50px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                cursor: pointer;
+
+                &:hover {
+                    fill: $muted;
+                }
+            }
+        }
+    }
+
+    .textarea__chat-attach-btn {
+        height: 44px;
         border: none;
         background-color: transparent;
+        padding: 5px 10px;
         cursor: pointer;
-        transition: width 0.3s ease;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        border-bottom-left-radius: 10px;
+        margin-top: auto;
 
         svg {
-            width: 40px;
-            height: 40px;
-            fill: $attention;
+            width: 100%;
+            height: 100%;
+            fill: #b9b9b9;
         }
+    }
 
-        svg:hover {
-            fill: black;
-        }
+    .textarea__chat-attach-btn:hover>svg {
+        fill: $bg-dark;
     }
 
     .textarea__chat {
@@ -192,12 +310,16 @@ const props = defineProps({
         resize: none;
         border: none;
         outline: none;
-        padding: 0 10px;
+        margin: 10px;
+        height: 24px;
+        max-height: 130px;
     }
 
     .textarea__chat-send-btn {
         border: none;
         background-color: transparent;
+        margin-top: 10px;
+        margin-bottom: 10px;
         margin-right: 5px;
         color: black;
     }
@@ -229,7 +351,54 @@ const props = defineProps({
     .textarea__chat-edit-btn:hover {
         font-weight: bold;
     }
+
+    .textarea__attach-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: absolute;
+        width: 100%;
+        overflow: hidden;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.632);
+
+        .attach-image-btn,
+        .attach-file-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            background-color: transparent;
+            color: #fff;
+            font-size: 18px;
+
+            svg {
+                width: 40px;
+                height: 40px;
+                fill: #fff;
+            }
+        }
+    }
 }
+
+
+.attach-enter-to,
+.attach-leave-from {
+    height: 84px;
+}
+
+.attach-enter-from,
+.attach-leave-to {
+    height: 0px;
+}
+
+.attach-enter-active,
+.attach-leave-active {
+    transition: height 0.3s ease-in-out;
+}
+
+
 
 @media (min-width: 601px) {
     .textarea-wrapper {
@@ -237,6 +406,10 @@ const props = defineProps({
 
         .textarea__chat {
             border-radius: 0 0 0 10px;
+        }
+
+        .textarea__attach-menu {
+            border-radius: 0 0 10px 10px;
         }
     }
 }

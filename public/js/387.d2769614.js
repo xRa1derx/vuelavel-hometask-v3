@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkclient"]=self["webpackChunkclient"]||[]).push([[387],{9387:function(n,e,t){t.r(e),t.d(e,{default:function(){return o}});var r=t(3396);function u(n,e){return(0,r.wg)(),(0,r.iD)("div",null,"Comments Component")}var c=t(89);const i={},l=(0,c.Z)(i,[["render",u]]);var o=l}}]);
+//# sourceMappingURL=387.d2769614.js.map
